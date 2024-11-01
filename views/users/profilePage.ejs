@@ -1,0 +1,465 @@
+﻿<%- include('userSubHeader') %>
+<style>
+  .wallet-container {
+    background-color: #f8f9fa;
+    border: 1px solid #d1d1d1;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .wallet-balance {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 20px;
+  }
+
+  .update-wallet-btn {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .update-wallet-btn:hover {
+    background-color: #218838;
+  }
+</style>
+
+    <main class="main mt-50">
+        <h3 class="text-center mb-4"><span style="color: #e44d26;">P</span>ROFILE</h3>
+      
+      <section class="pt-50 pb-150">
+        
+        <div class="container">
+           
+          <div class="row">
+
+            
+
+            <div class="col-lg-10 m-auto">
+              <div class="row">
+                <div class="col-md-4">
+                    
+                  <div class="dashboard-menu">
+                    <ul class="nav flex-column" role="tablist">
+                      <li class="nav-item">
+                        <a
+                          class="nav-link active"
+                          id="dashboard-tab"
+                          data-bs-toggle="tab"
+                          href="#dashboard"
+                          role="tab"
+                          aria-controls="dashboard"
+                          aria-selected="false"
+                          ><i class="fi-rs-settings-sliders mr-10"></i
+                          >Dashboard</a
+                        >
+                      </li>
+
+                      <!-- <li class="nav-item">
+                        <a
+                          class="nav-link"
+                          id="orders-tab"
+                          data-bs-toggle="tab"
+                          href="#orders"
+                          role="tab"
+                          aria-controls="orders"
+                          aria-selected="false"
+                          ><i class="fi-rs-shopping-bag mr-10"></i>Orders</a
+                        >
+                      </li> -->
+
+                      <!-- <li class="nav-item">
+                        <a
+                          class="nav-link"
+                          id="track-orders-tab"
+                          data-bs-toggle="tab"
+                          href="#track-orders"
+                          role="tab"
+                          aria-controls="track-orders"
+                          aria-selected="false"
+                          ><i class="fi-rs-lock mr-10"></i>Change Password</a
+                        >
+                      </li> -->
+
+                      <li class="nav-item">
+                        <a
+                          class="nav-link"
+                          id="address-tab"
+                          data-bs-toggle="tab"
+                          href="#address"
+                          role="tab"
+                          aria-controls="address"
+                          aria-selected="true"
+                          ><i class="fi-rs-marker mr-10"></i>My Address</a
+                        >
+                      </li>
+
+                      <!-- <li class="nav-item">
+                        <a
+                          class="nav-link"
+                          id="account-detail-tab"
+                          data-bs-toggle="tab"
+                          href="#account-detail"
+                          role="tab"
+                          aria-controls="account-detail"
+                          aria-selected="true"
+                          ><i class="fi-rs-edit mr-10"></i>Edit Profile</a
+                        >
+                      </li> -->
+
+
+                      <li class="nav-item">
+                        <a class="nav-link" href="/logout"
+                          ><i class="fi-rs-sign-out mr-10"></i>Logout</a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                  
+                </div>
+                
+                <div class="col-md-8">
+                    
+                  <div class="tab-content dashboard-content">
+                    <div
+                      class="tab-pane fade active show"
+                      id="dashboard"
+                      role="tabpanel"
+                      aria-labelledby="dashboard-tab"
+                    >
+                      <div class="card">
+                      
+                                            <div class="card-header ">
+                                              <h5 class="mb-0 text-white"></h5>
+                                          </div>                   
+                        <div class="card p-3 py-4 ">
+                          <div class="text-center">
+                            <img
+                              src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?size=338&ext=jpg&ga=GA1.1.44546679.1698969600&semt=ais"
+                              width="100"
+                              class="rounded-circle"
+                            />
+                          </div>
+
+                          <div class="text-center mt-3">
+                            <!-- name -->
+                            <h5 class="mt-2 mb-0"><%= user.name %></h5>
+
+                            <!-- email -->
+
+                            <span><%= user.email %></span>
+
+                            <div class="px-4 mt-1">
+                              <p class="fonts">
+                               <%= user.mobile %>
+                              </p>
+                            </div>
+
+                            <ul class="social-list">
+                              <li><i class="fa fa-facebook"></i></li>
+                              <li><i class="fa fa-dribbble"></i></li>
+                              <li><i class="fa fa-instagram"></i></li>
+                              <li><i class="fa fa-linkedin"></i></li>
+                              <li><i class="fa fa-google"></i></li>
+                            </ul>
+
+                            
+                          </div>
+                          <!-- <button id="generateReferralButton" class="btn  mt-4 bg-primary text-white" onclick="shareLink()">Invite with Referral</button> -->
+                        
+                        
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="tab-pane fade"
+                      id="orders"
+                      role="tabpanel"
+                      aria-labelledby="orders-tab"
+                    >
+
+                    </div>
+
+                    <div
+                      class="tab-pane fade"
+                      id="address"
+                      role="tabpanel"
+                      aria-labelledby="address-tab"
+                    >
+
+                    <div class="col-12">
+                        <div class="row d-flex">
+                            
+                        <!-- profilePage.ejs -->
+                        <% for (let i = 0; i < userAddresses.length; i++) { %>
+                            <div class="col-6">
+                                <div class="card">
+                                    <div class="card-header bg-success">
+                                        <h5 class="mb-0 text-white">Address</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <address>
+                                            <%= userAddresses[i].addressType %> <%= userAddresses[i].houseNo %> <%= userAddresses[i].street %><br />
+                                            <%= userAddresses[i].landmark ? userAddresses[i].landmark  : '' %>
+                                            <%= userAddresses[i].city %>, <%= userAddresses[i].state %> <%= userAddresses[i].pincode %> <%= userAddresses[i].country %><br />
+                                            Phone: <%= userAddresses[i].phoneNumber %>
+                                        </address>
+                                        <p><%= userAddresses[i].district %></p>
+                                        <div class="row">
+                                          <div class="col-12 d-flex justify-content-between align-items-center">
+                                              <a href="/editAddress/<%= userAddresses[i]._id %>" class="btn btn-warning btn-sm">Edit</a>
+                                      
+                                              <!-- Add a form for the delete button -->
+                                              <form action="/deleteAddress/<%= userAddresses[i]._id %>" method="post" style="display:inline;">
+                                                  <button type="submit" class="btn btn-danger btn-sm bg-danger" onclick="return confirmDelete()">Delete</button>
+                                              </form>
+                                          </div>
+                                      </div>
+                                      
+                                    </div>
+                                </div>
+
+                            </div>
+                        <% } %>
+                   
+                      </div>
+                        <div class="mt-3">
+                            <!-- Add Address Button -->
+                            <a href="/addAddress"><button class="btn btn-small btn-primary" id="addAddressBtn">Add Address</button></a> 
+                        </div>
+                    </div>
+                    
+
+                    
+                    </div>
+                    
+                    
+
+
+
+
+
+                    </div>
+                    <div
+                      class="tab-pane fade"
+                      id="account-detail"
+                      role="tabpanel"
+                      aria-labelledby="account-detail-tab"
+                    >
+                      <!-- <div class="card">
+                        <div class="card-header bg-dark">
+                          <h5 class="text-white">EDIT PROFILE</h5>
+                        </div>
+                        <div class="card-body">
+                          
+                          <form method="post" name="enq" action="/updateProfile">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>First Name <span class="required">*</span></label>
+                                    <input required=""  value="<%- user.name %>" class="form-control square" name="name" type="text" />
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                    <label>Mobile <span class="required">*</span></label>
+                                    <input required=""  value="<%- user.mobile %>" class="form-control square" name="mobile" type="tel" />
+                                </div>
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-fill-out submit" name="submit" value="Submit" onclick="saveProfile()">
+                                        Save
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        
+                        </div>
+                      </div> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Preloader Start -->
+    <div id="preloader-active">
+      <div class="preloader d-flex align-items-center justify-content-center">
+        <div class="preloader-inner position-relative">
+          <div class="text-center">
+            <h5 class="mb-5">Now Loading</h5>
+            <div class="loader">
+              <div class="bar bar1"></div>
+              <div class="bar bar2"></div>
+              <div class="bar bar3"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Vendor JS-->
+    <script src="/user/assets/js/vendor/modernizr-3.6.0.min.js"></script>
+    <script src="/user/assets/js/vendor/jquery-3.6.0.min.js"></script>
+    <script src="/user/assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+    <script src="/user/assets/js/vendor/bootstrap.bundle.min.js"></script>
+    <script src="/user/assets/js/plugins/slick.js"></script>
+    <script src="/user/assets/js/plugins/jquery.syotimer.min.js"></script>
+    <script src="/user/assets/js/plugins/wow.js"></script>
+    <script src="/user/assets/js/plugins/jquery-ui.js"></script>
+    <script src="/user/assets/js/plugins/perfect-scrollbar.js"></script>
+    <script src="/user/assets/js/plugins/magnific-popup.js"></script>
+    <script src="/user/assets/js/plugins/select2.min.js"></script>
+    <script src="/user/assets/js/plugins/waypoints.js"></script>
+    <script src="/user/assets/js/plugins/counterup.js"></script>
+    <script src="/user/assets/js/plugins/jquery.countdown.min.js"></script>
+    <script src="/user/assets/js/plugins/images-loaded.js"></script>
+    <script src="/user/assets/js/plugins/isotope.js"></script>
+    <script src="/user/assets/js/plugins/scrollup.js"></script>
+    <script src="/user/assets/js/plugins/jquery.vticker-min.js"></script>
+    <script src="/user/assets/js/plugins/jquery.theia.sticky.js"></script>
+    <!-- Template  JS -->
+    <script src="./user/assets/js/main.js?v=3.4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+
+    <script>
+      function saveProfile() {
+          // Display SweetAlert
+          Swal.fire({
+              icon: 'success',
+              title: 'Edit Saved',
+              showConfirmButton: false,
+              timer: 1500,
+              willClose: () => {
+                  // Reload the page after the SweetAlert is closed
+                  window.location.reload();
+              }
+          });
+      }
+  </script>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+
+<script>
+  function addWallet() {
+      Swal.fire({
+          title: "Enter amount to add to Wallet",
+          input: "text",
+          inputAttributes: {
+              autocapitalize: "off"
+          },
+          showCancelButton: true,
+          confirmButtonText: "Add",
+          showLoaderOnConfirm: true,
+          preConfirm: async (amount) => {
+              try {
+                  const response = await fetch('/addWallet', {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({ amount })
+                  });
+
+                  if (response.status === 200) {
+                 
+                      response.json().then((res) => {
+                          if (res.order) {
+                           
+                              var options = {
+                                  "key": "rzp_test_Vz3Fdh1bVQWYj8",
+                                  "amount": res.order.amount,
+                                  "currency": res.order.currency,
+                                  "name": "WatchVogue",
+                                  "description": "Test Transaction",
+                                  "order_id": res.order.id,
+                                  handler: async function (response) {
+                                    
+                                      try {
+                                          const updateResponse = await fetch('/updatewallet', {
+                                              method: 'POST',
+                                              headers: {
+                                                  'Content-Type': 'application/json'
+                                              },
+                                              body: JSON.stringify({ amount: res.order.amount / 100 })
+                                          });
+
+                                          if (updateResponse.ok) {
+                                              Swal.fire({
+                                                  position: "top",
+                                                  icon: "success",
+                                                  title: "Wallet Updated",
+                                                  showConfirmButton: true,
+                                                  timer: 1500
+                                              }).then(() => {
+                                                    // Reload the page after the user clicks "OK" on the SweetAlert
+                                                    location.reload();
+                                                });
+                                          }
+                                      } catch (error) {
+                                          console.error('Error updating wallet:', error);
+                                      }
+                                },
+                              };
+
+                 
+                              var rzp = new Razorpay(options);
+                              rzp.open();
+                          }
+                      })
+                  } else {
+                      Swal.fire({
+                          position: "top",
+                          icon: 'warning',
+                          title: "Failed to update Wallet !",
+                          showConfirmButton: false,
+                          timer: 1500
+                      })
+                  }
+              } catch (error) {
+                  console.log('An error occurred:', error);
+              }
+          },
+      });
+  }
+</script>
+
+<script>
+  function openWalletHistoryModal() {
+      $('#walletHistoryModal').modal('show');
+  }
+</script>
+
+  <script>
+    function shareLink() {
+    
+      $.get('/getreferal',(data)=>{
+        const referalcode = data.referalCode;
+       
+        const linkToShare = `http://127.0.0.1:7000/register?code=${referalcode}`;
+
+        const whatsappUrl = `whatsapp://send?text=${encodeURIComponent(linkToShare)}`;
+
+        window.open(whatsappUrl, '_blank');
+       
+      })
+      .fail(error)
+      {
+        alert("Failed getting the refferal code")
+      }
+    }
+  </script>
+
+
+  </body>
+</html>

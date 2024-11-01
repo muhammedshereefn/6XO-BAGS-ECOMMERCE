@@ -1,0 +1,114 @@
+<%- include('adminHeader') %>
+
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Order List </h2>
+                   
+                </div>
+                
+            </div>
+            <div class="card mb-4">
+                <header class="card-header">
+                    <div class="row gx-3">
+                        <div class="col-lg-4 col-md-6 me-auto">
+                            <!-- <input type="text" placeholder="Search..." class="form-control"> -->
+                        </div>
+                       
+                       
+                    </div>
+                </header> <!-- card-header end// -->
+                <div class="card-body">
+                    <div class="table-responsive">
+                      
+
+                        <% orders.forEach(order => { %>
+                            <table class="table table-hover">
+                                <thead class="bg-dark text-white">
+                                    <tr>
+                                        <th>#ID</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Method</th>
+                                        <th scope="col" class="text-end">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-light">
+                                    <tr>
+                                        <td class="align-middle">ODR<%= order._id.toString().replace(/\D/g, '').slice(-6) %></td>
+                                        <td colspan="5">
+                                            <div class="d-flex flex-column">
+                                                <strong>Products:</strong>
+                                                <% order.products.forEach(product => { %>
+                                                    <span><%= product.quantity %> x <%= product.product.name %></span>
+                                                <% }); %>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td><%= order.createdAt.toLocaleDateString() %></td>
+                                        <td><span class="badge rounded-pill alert-warning" id="statusChange"><%= order.status %></span></td>
+                                        <td><%= order.paymentMethod %></td>
+                                        <td class="text-end">
+                                            <a href="/admin/orderDetail?id=<%- order._id %>" class="btn btn-md btn-info rounded font-sm">Detail</a>
+                                            <% if (order.status !== "Cancelled") { %>
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        Actions
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item btn-danger" href="/admin/orderCancel/<%= order._id %>">Cancel</a>
+                                                        <a class="dropdown-item btn-warning" href="/admin/orderPending/<%= order._id %>">Pending</a>
+                                                        <a class="dropdown-item btn-success" href="/admin/orderDelivered/<%= order._id %>">Delivered</a>
+                                                        <a class="dropdown-item btn-success" href="/admin/orderConform/<%= order._id %>">Confirm</a>
+                                                    </div>
+                                                </div>
+                                            <% } %>
+                                            <hr>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        <% }); %>
+                                
+                    </div> <!-- table-responsive //end -->
+                </div> <!-- card-body end// -->
+            </div> <!-- card end// -->
+           <!-- Your existing order list rendering logic -->
+
+<!-- Pagination -->
+<div class="pagination-area mt-15 mb-50">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-start">
+            <% if (currentPage > 1) { %>
+                <li class="page-item">
+                    <a class="page-link" href="?page=<%= currentPage - 1 %>">
+                        <i class="material-icons md-chevron_left"></i>
+                    </a>
+                </li>
+            <% } %>
+            <% for (let i = 1; i <= totalPages; i++) { %>
+                <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                    <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                </li>
+            <% } %>
+            <% if (currentPage < totalPages) { %>
+                <li class="page-item">
+                    <a class="page-link" href="?page=<%= currentPage + 1 %>">
+                        <i class="material-icons md-chevron_right"></i>
+                    </a>
+                </li>
+            <% } %>
+        </ul>
+    </nav>
+</div>
+
+        </section> <!-- content-main end// -->
+
+       
+       
+
+<%- include('adminFooter') %>

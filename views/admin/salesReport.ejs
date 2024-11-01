@@ -1,0 +1,240 @@
+<%- include('adminHeader') %>
+
+
+
+
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Sales List </h2>
+            <br><br>
+            <!-- Date Range Selector -->
+            <div class="date-range-selector float-right">
+                <label for="startDate">Start Date:</label>
+                <input type="date" class="form-control" id="startDate">
+            
+                <label for="endDate">End Date:</label>
+                <input type="date" class="form-control" id="endDate">
+            </div>
+            <br>
+            <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200" id="filterOrders">
+                <option value="all">Report</option>
+                <option value="today">Report of Today</option>
+                <option value="week">Report of this week</option>
+                <option value="month">Report of this month</option>
+                <option value="year">Report of this year</option>
+            </select>
+    
+            <div class="col-md-12">
+                
+
+                <button class="btn btn-primary" id="downloadPdf">Download PDF</button>
+                <button class="btn btn-primary" id="filterSales">Filter Sales</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <% let orderCounter = 0; %>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Customer name</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th class="text-end"> Action </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (orders.length > 0) { %>
+                                    <% orders.forEach(order => { %>
+                                        <!-- Single order data -->
+                                        <!-- Render table rows -->
+                                        <tr>
+                                            <td>ODR<%= order._id.toString().replace(/\D/g, '').slice(-6) %></td>
+                                            <td><%= order.user ? order.user.name : 'N/A' %></td>
+                                            <td><%= order.grandTotal%></td>
+                                            <div class="mb-2">
+                                                <td style=".badge-soft-success {
+                                                    background-color: #28a745;
+                                                    color: #fff;
+                                                }
+                                                
+                                                .badge-soft-danger {
+                                                    background-color: #dc3545;
+                                                    color: #fff;
+                                                }">
+                                                   <span class="badge badge-pill <%= order.status === 'Cancelled' ? 'badge-soft-danger' : 'badge-soft-success' %>">
+                                                        <%= order.status %>
+                                                    </span>
+                                                </td>
+                                            </div>
+                                            <td><%= order.createdAt ? order.createdAt.toLocaleDateString() : 'N/A' %></td>
+                                            <td class="text-end"> <a href="/admin/orderDetail?id=<%- order._id%>" class="btn btn-xs" data-toggle="modal" data-target="#orderDetailsModal<%= order._id %>"> View details</a> </td>
+                                        </tr>
+                                        <!-- End single order data -->
+                                    <% }); %>
+                                <% } else { %>
+                                    <!-- If no orders found -->
+                                    <tr>
+                                        <td colspan="6">No item found in Orders</td>
+                                    </tr>
+                                    <!-- End conditional check -->
+                                <% } %>
+                            </tbody>
+                            
+                            
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+                        </div>
+                        <!-- End table-responsive -->
+                    </div>
+                    <!-- End card-body -->
+                </div>
+                <!-- End card -->
+                <!-- Pagination section -->
+                <!-- Check if total pages exist -->
+                <!-- Display pagination buttons -->
+                <!-- End total pages check -->
+            </div>
+            <!-- End col-md-9 -->
+
+            <!-- <div class="col-md-3">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="mb-3">Filter by</h5>
+                        <form>
+                            <div class="mb-4">
+                                <label for="order_id" class="form-label">Order ID</label>
+                                <input type="text" placeholder="Type here" class="form-control" id="order_id">
+                            </div>
+                            <div class="mb-4">
+                                <label for="order_customer" class="form-label">Customer</label>
+                                <input type="text" placeholder="Type here" class="form-control" id="order_customer">
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Order Status</label>
+                                <select class="form-select">
+                                    <option>Published</option>
+                                    <option>Draft</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label for="order_total" class="form-label">Total</label>
+                                <input type="text" placeholder="Type here" class="form-control" id="order_total">
+                            </div>
+                            <div class="mb-4">
+                                <label for="order_created_date" class="form-label">Date Added</label>
+                                <input type="text" placeholder="Type here" class="form-control" id="order_created_date">
+                            </div>
+                            <div class="mb-4">
+                                <label for="order_modified_date" class="form-label">Date Modified</label>
+                                <input type="text" placeholder="Type here" class="form-control" id="order_modified_date">
+                            </div>
+                            <div class="mb-4">
+                                <label for="order_customer_1" class="form-label">Customer</label>
+                                <input type="text" placeholder="Type here" class="form-control" id="order_customer_1">
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+                
+            </div> -->
+            <!-- End col-md-3 -->
+        </div>
+        <!-- End row -->
+    </section>
+    <!-- End content-main -->
+
+    <script>
+      document.getElementById('filterOrders').addEventListener('change', function () {
+  const selectedValue = this.value;
+  let url = '/admin/salesReportt?date=' + selectedValue;
+
+  if (selectedValue === 'custom') {
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    url += `&startDate=${startDate}&endDate=${endDate}`;
+  }
+
+  window.location.href = url;
+});
+
+document.getElementById('downloadPdf').addEventListener('click', function () {
+  const selectedValue = document.getElementById('filterOrders').value;
+  const url = `/admin/salesReportt?date=${selectedValue}&downloadPdf=true`;
+  window.location.href = url;
+});
+
+    </script>
+
+  
+<script>
+    document.getElementById('filterSales').addEventListener('click', async () => {
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+
+    // Validate the dates and perform the filtering logic
+    if (startDate && endDate) {
+        // Make a fetch request to get sales data within the specified date range
+        const response = await fetch(`/admin/sales?startDate=${startDate}&endDate=${endDate}`);
+        const filteredSales = await response.json();
+
+        // Update the table with the filtered data
+        updateSalesTable(filteredSales);
+    } else {
+        // Handle invalid date range (e.g., show an alert)
+        alert('Please select both start and end dates.');
+    }
+});
+
+function updateSalesTable(filteredSales) {
+    console.log(filteredSales);
+    const tableBody = document.querySelector('.table tbody');
+    tableBody.innerHTML = ''; // Clear existing rows
+
+    if (filteredSales.length > 0) {
+        filteredSales.forEach(order => {
+            // Render table rows for filtered sales
+            const row = `
+                <tr>
+                    <td>ODR${order._id.toString().replace(/\D/g, '').slice(-6)}</td>
+                    <td>${order.user ? order.user.name : 'N/A'}</td>
+                    <td>${order.grandTotal}</td>
+                    <td>${order.status}</td>
+                    <td>${order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'N/A'}</td>
+                    <td class="text-end"> Action </td>
+                </tr>
+            `;
+            tableBody.insertAdjacentHTML('beforeend', row);
+        });
+    } else {
+        // If no orders found in the filtered range
+        const noDataRow = '<tr><td colspan="6">No item found in the specified date range</td></tr>';
+        tableBody.insertAdjacentHTML('beforeend', noDataRow);
+    }
+}
+</script>
+
+
+
+
+
+<%- include('adminFooter') %>

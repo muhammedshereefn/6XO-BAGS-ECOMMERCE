@@ -1,0 +1,513 @@
+﻿<%- include('userSubHeader') %>
+
+
+
+    <main class="main">
+        
+        <section class="mt-50 mb-50">
+            <div class="container">
+               
+                
+
+
+                <div class="row">
+
+                  <div class="mb-25">
+                    <h4>Billing Details</h4>
+                </div>
+                    
+                  <div class="mt-3">
+                    <!-- Add Address Button -->
+                    <a href="/checkoutAddaddress"><button class="btn btn-small btn-primary bg-dark" id="addAddressBtn">Add Address</button></a> 
+                </div>
+                    
+                  
+                    <div class="row">
+
+
+                        <div class="col-md-6" id="view_card">
+                          
+                            <div class="row">
+                              
+                                <!-- profilePage.ejs -->
+                                <% for (let i = 0; i < address.length; i++) { %>
+                                    <div class="col-12 mt-4">
+                                        <input class="form-check-input" type="radio" required="" style="width: 1rem; height: 1rem;" value="<%= address[i]._id %>" name="selectedAddressId" id="checkoutShippingMethod" checked>
+                
+                                        <div class="card mt-4">
+                                            <div class="card-header bg-dark">
+                                                <h5 class="mb-0 text-white">Address</h5>
+                                            </div>
+                                            <div class="card-body bg-light">
+                                                <address>
+                                                    <%= address[i].addressType %> <%= address[i].houseNo %> <%= address[i].street %><br />
+                                                    <%= address[i].landmark ? address[i].landmark : '' %>
+                                                    <%= address[i].city %>, <%= address[i].state %> <%= address[i].pincode %> <%= address[i].country %><br />
+                                                    Phone: <%= address[i].phoneNumber %>
+                                                </address>
+                                                <p><%= address[i].district %></p>
+                                                <div class="row">
+                                                    <div class="col-12 d-flex justify-content-between">
+                                                        <a href="/checkoutEditAddress/<%= address[i]._id %>" class="btn btn-small btn-warning bg-primary">Edit</a>
+                                                       
+                                                        <!-- Add a form for the delete button -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                
+                        <div class="col-md-6">
+                            <div class="order_review">
+                                <div class="mb-20">
+                                    <h4>Your Orders</h4>
+                                </div>
+                                <div class="table-responsive order_table text-center">
+                                    <table class="table">
+                                        <thead class="bg-dark text-white">
+                                            <tr>
+                                                <th colspan="2">Product</th>
+                                                <th>Product Price</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="bg-light">
+                                            <% cart.items.forEach(product => { %>
+                                                <tr>
+                                                    <td class="image product-thumbnail">
+                                                        <img src="<%= product.product.coverimage %>" alt="<%= product.product.name %>">
+                                                    </td>
+                                                    <td>
+                                                        <h5><a href="<%= 'shop-product-full.html' %>"><%= product.product.name %></a></h5>
+                                                        <span class="product-qty">x <%= product.quantity %></span>
+                                                    </td>
+                                                    <td>Price : <%= product.product.price %></td>
+                                                    <td>₹<%= product.product.price * product.quantity %></td>
+                                                </tr>
+                                            <% }); %>
+                                        
+                                            <tr>
+                                                <th>SubTotal</th>
+                                                <% 
+                                                    total = 0; 
+                                                    cart.items.forEach(product => {
+                                                        total += product.product.price * product.quantity;
+                                                    });
+                                                %>
+                                                <td class="product-subtotal" colspan="2">₹<%= total %></td>
+                                            </tr>
+                                        
+                                            <!-- Determine Delivery Charge -->
+                                            <% 
+                                                let deliveryCharge = 0;
+                                                if (cart.items.length === 1) {
+                                                    deliveryCharge = 80;
+                                                } else if (cart.items.length === 2) {
+                                                    deliveryCharge = 100;
+                                                }
+                                            %>
+                                            <tr>
+                                                <th>Shipping</th>
+                                                <td colspan="2"><em>₹<%= deliveryCharge %></em></td>
+                                            </tr>
+                                        
+                                            <tr>
+                                                <th>Total</th>
+                                                <% 
+                                                    let finalTotal = total + deliveryCharge; 
+                                                %>
+                                                <td colspan="2" class="product-subtotal">
+                                                    <span class="font-xl text-brand fw-900">₹<%= finalTotal %></span>
+                                                    <input type="hidden" id="orderTotalInput" value="<%= finalTotal %>">
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        
+                                    </table>
+                                </div>
+
+
+                                <!-- <div class="mb-30 mt-50">
+                                  <div class="heading_s1 mb-3">
+                                      <h4>Apply Coupon</h4>
+                                  </div>
+                                  <div class="total-amount">
+                                      <div class="left">
+                                          <button class="btn btn-sm bg-dark" id="showCouponsBtn">Show Coupons</button>
+                                      </div>
+                                      <div class="coupon" id="couponSection" style="display: none;">
+                                     
+                                          <% coupons.forEach(coupon => { %>
+                                              <div class="coupon-item" id="couponItem<%= coupon.code %>" <% if (orderTotal >= coupon.minimumAmount) { %> style="display: block;" <% } else { %> style="display: none;" <% } %>>
+                                                  <p><strong><%= coupon.code %></strong> - <%= coupon.discountPercentage %>% off</p>
+                                                  <button class="btn btn-sm bg-primary" data-coupon-code="<%= coupon.code %>" onclick="applyCoupon(this)">Apply</button>
+                                              </div>
+                                             
+                                          <% }); %>
+                                        
+                                          
+                                      </div>
+                                  </div> -->
+                                  <p style="font-size: 15px; padding-bottom: 15px; color: red;" class="mt-2">Delivered within 3 business days</p>
+                              </div>
+                              </div>
+                              
+
+
+                                <div class="bt-1 border-color-1 mt-30 mb-30"></div>
+                                <div class="payment_method">
+                                    <div class="mb-25">
+                                        <h5>Payment</h5>
+                                    </div>
+                                    <div class="payment_option">
+                                      
+                                     
+                                      <div class="custome-radio">
+                                          <input class="form-check-input" required="" type="radio" name="payment_option" id="razorpayRadio" value="razorpay" checked="">
+                                          <label class="form-check-label" for="razorpayRadio" data-bs-toggle="collapse" data-target="#razorpay" aria-controls="razorpay">RAZORPAY / UPI</label>
+                                          <div class="form-group collapse in" id="razorpay">
+                                              <p class="text-muted mt-5">Pay via Razorpay; you can pay with your credit card.</p>
+                                          </div>
+                                          
+                                      </div>
+                                  </div>
+                                  
+                                </div>
+                                
+                                <!-- Hidden fields for selected address -->
+                                <input type="hidden" name="selectedAddressId" id="selectedAddressId">
+                
+                                <!-- Hidden fields for payment method -->
+                                <input type="hidden" name="paymentMethod" id="paymentMethod">
+                
+                                <!-- Hidden fields for product details -->
+                                <% cart.items.forEach((product, index) => { %>
+                                    <input type="hidden" name="products[<%= index %>][productId]" value="<%= product.product._id %>">
+                                    <input type="hidden" name="products[<%= index %>][quantity]" value="<%= product.quantity %>">
+                                    
+                                   
+                                    <!-- Add more fields if needed -->
+                                <% }); %>
+                            
+
+                                <input type="hidden" name="discountedTotal" id="discountedTotalInput" value="<%= total %>">
+                                <button type="button" id="placeOrderButton" onclick="confirmPlaceOrder()" class="btn btn-fill-out btn-block mt-30 bg-dark">PAY NOW</button>
+                            </div>
+                        </div>
+                    </div>
+                
+                
+                   
+                    
+                </div>
+
+                
+            </div>
+        </section>
+    </main>
+   
+
+    <footer class="main" style="background-color: #000000;">
+
+        
+
+        <section class="section-padding footer-mid">
+            <div class="container pt-15 pb-20">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="widget-about font-md mb-md-5 mb-lg-0">
+                            <div class="logo logo-width-1 wow fadeIn animated">
+                                <h3><a href="/home" class="text-white">6XO<span style="color: #e44d26;"> BAGS</span></a></h3>
+                            </div>
+                            <h5 class="mt-20 mb-10 fw-600 text-white wow fadeIn animated">Contact</h5>
+    
+                            <p class="wow fadeIn animated text-white pb-25">
+                                <strong>Phone: </strong>7876356476
+                            </p>
+             
+                            <!-- <h5 class="mb-10 mt-30 fw-600 text-white wow fadeIn animated">Follow Us</h5>
+                            <div class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0">
+                                <a href="#" ><img  src="/user/assets/imgs/theme/icons/icon-facebook.svg" alt=""></a>
+                            
+                                <a href="#"><img src="/user/assets/imgs/theme/icons/icon-instagram.svg" alt=""></a>
+                  
+                                <a href="#"><img src="/user/assets/imgs/theme/icons/icon-youtube.svg" alt=""></a>
+                            </div> -->
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-3 text-white">
+                        <h5 class="widget-title wow fadeIn animated text-white">About</h5>
+                        <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0 ">
+                            <li ><a href="#" class="text-white">About Us</a></li>
+                            <li><a href="#" class="text-white">Contact Us</a></li>
+                            <li><a href="#" class="text-white">Support Center</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2  col-md-3">
+                        <h5 class="widget-title wow fadeIn animated text-white">My Account</h5>
+                        <ul class="footer-list wow fadeIn animated">
+                            <li><a href="/login" class="text-white">Sign In</a></li>
+                            <li><a href="/cart" class="text-white">View Cart</a></li>
+  
+                            <li><a href="/orders" class="text-white">Order</a></li>
+                        </ul>
+                    </div>
+  
+                </div>
+            </div>
+        </section>
+  
+    </footer>
+      <!-- Preloader Start -->
+      <div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+          <div class="preloader-inner position-relative">
+            <div class="text-center">
+              <h5 class="mb-5">Now Loading</h5>
+              <div class="loader">
+                <div class="bar bar1"></div>
+                <div class="bar bar2"></div>
+                <div class="bar bar3"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Vendor JS-->
+      
+      <script src="/user/assets/js/vendor/modernizr-3.6.0.min.js"></script>
+      <script src="/user/assets/js/vendor/jquery-3.6.0.min.js"></script>
+      <script src="/user/assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+      <script src="/user/assets/js/vendor/bootstrap.bundle.min.js"></script>
+      <script src="/user/assets/js/plugins/slick.js"></script>
+      <script src="/user/assets/js/plugins/jquery.syotimer.min.js"></script>
+      <script src="/user/assets/js/plugins/wow.js"></script>
+      <script src="/user/assets/js/plugins/jquery-ui.js"></script>
+      <script src="/user/assets/js/plugins/perfect-scrollbar.js"></script>
+      <script src="/user/assets/js/plugins/magnific-popup.js"></script>
+      <script src="/user/assets/js/plugins/select2.min.js"></script>
+      <script src="/user/assets/js/plugins/waypoints.js"></script>
+      <script src="/user/assets/js/plugins/counterup.js"></script>
+      <script src="/user/assets/js/plugins/jquery.countdown.min.js"></script>
+      <script src="/user/assets/js/plugins/images-loaded.js"></script>
+      <script src="/user/assets/js/plugins/isotope.js"></script>
+      <script src="/user/assets/js/plugins/scrollup.js"></script>
+      <script src="/user/assets/js/plugins/jquery.vticker-min.js"></script>
+      <script src="/user/assets/js/plugins/jquery.theia.sticky.js"></script>
+      <script src="/user/assets/js/placeOrder.js"></script>
+      <!-- Template  JS -->
+      <script src="./user/assets/js/main.js?v=3.4"></script>
+
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Wait for the DOM to be fully loaded
+            const showCouponsBtn = document.getElementById("showCouponsBtn");
+            const couponSection = document.getElementById("couponSection");
+
+            
+    
+            showCouponsBtn.addEventListener("click", function() {
+                // Toggle the display property of the coupon section
+                if (couponSection.style.display === "none" || couponSection.style.display === "") {
+                    couponSection.style.display = "block";
+                } else {
+                    couponSection.style.display = "none";
+                }
+            });
+        });
+    
+        function copyCoupon(code) {
+    // Create a temporary input element
+    const tempInput = document.createElement("input");
+
+    // Set the value of the input to the coupon code
+    tempInput.value = code;
+
+    // Append the input to the document
+    document.body.appendChild(tempInput);
+
+    // Select the text in the input
+    tempInput.select();
+
+    // Execute the copy command
+    document.execCommand("copy");
+
+    // Remove the temporary input
+    document.body.removeChild(tempInput);
+
+    // Provide a visual indication or feedback to the user
+    alert("Coupon code copied: " + code);
+}
+    </script>
+   
+
+ 
+<script>
+  async function applyCoupon(button) {
+    const orderTotalInput = document.getElementById("orderTotalInput").value;
+    const couponCode = button.dataset.couponCode;
+
+   
+
+    // Disable the button to prevent multiple clicks
+    button.disabled = true;
+
+    // Display SweetAlert confirmation
+    Swal.fire({
+      title: 'Apply Coupon',
+      text: `Are you sure you want to apply the coupon code ${couponCode}?`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, apply it!',
+      cancelButtonText: 'Cancel',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await fetch('validateCoupon', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ code: couponCode, total: orderTotalInput }),
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            // Update the UI with the discounted total
+            const discountedTotal = data.discountedTotal;
+            document.querySelector(".font-xl.text-brand.fw-900").textContent = `₹${discountedTotal}`;
+
+            // Optionally, you can also update the coupon section or any other UI elements
+            document.getElementById("couponSection").style.display = "block";
+            document.getElementById("appliedCouponInput").value = couponCode;
+
+            // Hide the applied coupon from the UI
+            const couponItem = document.getElementById(`couponItem${couponCode}`);
+            if (couponItem) {
+              couponItem.style.display = "none";
+            }
+
+            // Display success SweetAlert
+            Swal.fire({
+              title: 'Coupon Applied!',
+              text: `The coupon code ${couponCode} has been applied successfully.`,
+              icon: 'success',
+            });
+          } else {
+            // Display an error message to the user
+            Swal.fire({
+              title: 'Error',
+              text: data.message,
+              icon: 'error',
+            });
+          }
+        } catch (error) {
+          console.error('Error applying coupon:', error);
+        }
+      } else {
+        // Re-enable the button if the user cancels
+        button.disabled = false;
+      }
+    });
+  }
+</script>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+
+<script>
+  function addWallet() {
+      Swal.fire({
+          title: "Enter amount to add to Wallet",
+          input: "text",
+          inputAttributes: {
+              autocapitalize: "off"
+          },
+          showCancelButton: true,
+          confirmButtonText: "Add",
+          showLoaderOnConfirm: true,
+          preConfirm: async (amount) => {
+              try {
+                  const response = await fetch('/addWallet', {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({ amount })
+                  });
+
+                  if (response.status === 200) {
+                 
+                      response.json().then((res) => {
+                          if (res.order) {
+                           
+                              var options = {
+                                  "key": "rzp_test_Vz3Fdh1bVQWYj8",
+                                  "amount": res.order.amount,
+                                  "currency": res.order.currency,
+                                  "name": "WatchVogue",
+                                  "description": "Test Transaction",
+                                  "order_id": res.order.id,
+                                  handler: async function (response) {
+                                    
+                                      try {
+                                          const updateResponse = await fetch('/updatewallet', {
+                                              method: 'POST',
+                                              headers: {
+                                                  'Content-Type': 'application/json'
+                                              },
+                                              body: JSON.stringify({ amount: res.order.amount / 100 })
+                                          });
+
+                                          if (updateResponse.ok) {
+                                              Swal.fire({
+                                                  position: "top",
+                                                  icon: "success",
+                                                  title: "Wallet Updated",
+                                                  showConfirmButton: true,
+                                                  timer: 1500
+                                              }).then(() => {
+                                                    // Reload the page after the user clicks "OK" on the SweetAlert
+                                                    location.reload();
+                                                });
+                                          }
+                                      } catch (error) {
+                                          console.error('Error updating wallet:', error);
+                                      }
+                                },
+                              };
+
+                 
+                              var rzp = new Razorpay(options);
+                              rzp.open();
+                          }
+                      })
+                  } else {
+                      Swal.fire({
+                          position: "top",
+                          icon: 'warning',
+                          title: "Failed to update Wallet !",
+                          showConfirmButton: false,
+                          timer: 1500
+                      })
+                  }
+              } catch (error) {
+                  console.log('An error occurred:', error);
+              }
+          },
+      });
+  }
+</script>
+  
+
+<!-- SweetAlert CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    </body>
+    </html>
+    
+    

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <link rel="stylesheet" href="/user/assets/css/style.css">
+</head>
+<body>
+    <!-- Email input -->
+    <div class="container" id="emailFields" style="width: 320px; " >
+        <h1>Forgot Password</h1>
+        <p>Enter email to continue</p>
+       
+            <input type="text" name="otp" id="emailInput" placeholder="Email" style="margin-right: 10px; width: 300px;">
+             <p><span id="errMsg" style="color: red;"></span></p>
+            <button type="submit" id="sendOTP">Send OTP</button>
+       
+    </div>
+    <!-- Enter otp -->
+    <div class="container" style="display: none;" id="otpFields">
+        <h1>OTP Verification</h1>
+        <p>Enter the OTP sent to your email.</p>
+        <p id="changeEmail" style="color: blue; text-decoration: underline; cursor: pointer;">Change Email</p>
+        
+            <input type="text" minlength="6" maxlength="6" name="otp" placeholder="Enter OTP" id="otpInput" style="text-align: center;">
+            <p><span id="OtpErr" style="color: red;"></span></p>
+            <button type="submit" id="verifyOtp">Verify</button>
+      
+    </div>
+    <!-- Enter new passwiord -->
+    <div class="container" id="newpasswordField" style="width: 320px; display: none;" >
+        <h1>New Password</h1>
+        <p>Enter a strong password</p>
+       
+        <input type="text"  id="newpassword1" placeholder="Enter Password" style="margin-right: 10px; width: 300px;">
+        <input type="text" id="newpassword2" placeholder="Re-entr Password" style="margin-right: 10px; width: 300px;">
+             <p><span id="errMsgPass" style="color: red;"></span></p>
+            <button type="submit" id="confirmPassword">Confirm</button>
+       
+    </div>
+
+    <script>
+     
+        const emailFields = document.getElementById('emailFields')
+        const otpFields = document.getElementById('otpFields')
+        const newpasswordField = document.getElementById('newpasswordField')
+   //    Click enter email
+   const sendOTP = document.getElementById('sendOTP')
+       sendOTP.addEventListener('click',(e)=>{
+        const errMsg = document.getElementById('errMsg')
+        const emailInput = document.getElementById('emailInput').value
+       
+        if(emailInput.length <= 0){
+            errMsg.innerHTML = 'Fill this Field'
+            e.preventDefault()
+            return
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(!(emailRegex.test(emailInput))){
+            errMsg.innerHTML = 'Invalid email ID'
+            e.preventDefault()
+            return
+        }
+        fetch('/forgotEmailInput',{
+            method : 'POST',
+            headers : {'Content-Type' : 'application/json'},
+            body : JSON.stringify({email : emailInput})
+        }).then(responds => responds.json())
+        .then(data =>{
+            if(data.sucess){
+        emailFields.style.display = 'none'
+        otpFields.style.display = 'block'
+            }else{
+                errMsg.innerHTML = data.message
+                e.preventDefault()
+                return
+            }
+        }).catch(error =>{
+            alert(err)
+        })
+        
+       })
+       
+    //    Change Email email
+       const changeEmail = document.getElementById('changeEmail')
+       changeEmail.addEventListener('click',()=>{
+        emailFields.style.display = 'block'
+        otpFields.style.display = 'none'
+        newpasswordField.style.display = 'none'
+       })
+    
+       //    Click submit otp
+    const verifyOtp = document.getElementById('verifyOtp')
+    verifyOtp.addEventListener('click',()=>{
+        const OtpErr = document.getElementById('OtpErr')
+        const otpInput = document.getElementById('otpInput').value
+        if(otpInput.length === 0 || otpInput.length > 6){
+            OtpErr.innerHTML = 'Cant be empty'
+            return
+        }
+        fetch('/verifyForgotOTP',{
+            method : 'POST',
+            headers : {'Content-Type':'application/json'},
+            body : JSON.stringify({otp : otpInput})
+        }).then(responds => responds.json())
+        .then(data =>{
+            if(data.sucess){
+        emailFields.style.display = 'none'
+        otpFields.style.display = 'none'
+        newpasswordField.style.display = 'block'
+            }else{
+                OtpErr.innerHTML = data.message
+                return
+            }
+        })
+
+
+    })
+    //    Click enter new password
+    const emailInput = document.getElementById('emailInput').value
+       const confirmPassword = document.getElementById('confirmPassword')
+       confirmPassword.addEventListener('click',()=>{
+        const errMsgPass = document.getElementById('errMsgPass')
+        const newpassword1 = document.getElementById('newpassword1').value
+        const newpassword2 = document.getElementById('newpassword2').value
+        if(newpassword1.length === 0 || newpassword2.length === 0){
+            errMsgPass.innerHTML = `Password can't be empty `
+            return
+        }
+        
+        if(newpassword1 !== newpassword2){
+            errMsgPass.innerHTML = `both password must be same `
+            return
+        }
+        fetch('/addNewPassword',{
+            method : 'POST',
+            headers : {'Content-Type':'application/json'},
+            body : JSON.stringify({
+                password : newpassword1,
+                email : emailInput
+            })
+        }).then(responds => responds.json())
+        .then(data =>{
+            if(data.sucess){
+                window.location.href = '/login'
+            }else{
+                errMsgPass.innerHTML = data.message
+                return
+            }
+        }).catch(err =>{
+
+        })
+       })
+
+    </script>
+</body>
+</html>

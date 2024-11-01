@@ -1,0 +1,68 @@
+<%- include('adminHeader') %>
+
+
+<br>
+<br>
+<br>
+<br>
+
+<section class="content-main">
+<div class="container">
+    <div class="row">
+       
+            
+            <% for(let i=0 ; i< product.length ;i++){%>
+                <div class="col-lg-3">
+            <div class="card ">
+                <div class="card-header">
+                    <h4>Offer</h4>
+                </div>
+                <div class="card-body">
+                    <div class="input-upload">
+                        <img style="height: 7rem; width: 10rem;" src="<%= product[i].coverimage %>" alt="">
+                        <form action="/admin/updateOffer" method="post">
+                            <p><%= product[i].name %></p>
+                            <p><%= product[i].price %></p>
+                            
+                            <h6><label for="offer">Update Product offer</label></h6>
+                            <% console.log(product[i].offerPrice); %>
+                            
+                            <input class="form-control" name="offerPrice" type="text" value="<%= product[i].offerPrice %>">
+                            <input class="form-control" name="id" type="hidden" value="<%= product[i]._id %>">
+                            <br>
+                            <button class="btn btn-sm btn-light rounded" style="color: rgb(255, 255, 255); background-color: rgb(70, 149, 122);" type="submit">save</button>
+                        </form>
+                    </div>
+                </div>
+            </div> <!-- card end// -->
+
+        </div>
+
+            <%}%>
+
+            <div class="pagination-area mt-15 mb-50">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-start">
+                        <% for (let i = 1; i <= totalPages; i++) { %>
+                            <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                                <a class="page-link" href="/admin/productOffer?page=<%= i %>"><%= i %></a>
+                            </li>
+                        <% } %>
+                    </ul>
+                </nav>
+            </div>
+
+    </div>
+</div>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</section>
+
+
+
+<%- include('adminFooter') %>

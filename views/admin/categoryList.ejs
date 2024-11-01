@@ -1,0 +1,132 @@
+
+<%- include('adminHeader') %>
+
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Categories </h2>
+                    <p>Add, edit or list a category</p>
+                </div>
+                <div>
+                  
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <form action="/admin/createCategory" method="post" >
+                                <div class="mb-4">
+                                    <label for="product_name" class="form-label">Name</label>
+                                    <input type="text" placeholder="Type here" class="form-control" id="product_name" name="name" required="" />
+                                </div>
+                                
+                                
+                                <div class="mb-4">
+                                    <label class="form-label">Description</label>
+                                    <textarea placeholder="Type here" class="form-control" name="description" required=""></textarea>
+                                </div>
+                                <div class="d-grid">
+                                    <button class="btn btn-primary">Create category</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">
+                                                <div class="form-check">
+                                                   
+                                                </div>
+                                            </th>
+                                            
+                                            <th>Name</th>
+                                            <th>Description</th>
+
+                                            <th class="text-end">Action</th>
+                                            <th>Edit</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% if (category.length > 0) { %>
+                                          <% category.forEach((category) => { %>
+                                            <tr>
+                                              <td class="text-center">
+                                                <div class="form-check">
+                                                  
+                                                </div>
+                                              </td>
+                                              <td><b><%= category.name %></b></td>
+                                              <td><%= category.description %></td>
+                                              <td class="text-end">
+                                                <li>
+                                                  <% if (category.isListed === true) { %>
+                                                    <a href="/admin/category/block?id=<%= category._id %>">
+                                                      <i class="ri-eye-line"></i>
+                                                      <span style="color: rgb(39, 125, 95);">Listed</span>
+                                                    </a>
+                                                  <% } else { %>
+                                                    <a href="/admin/category/unblock?id=<%= category._id %>">
+                                                      <i class="ri-eye-line"></i>
+                                                      <span style="color: rgb(172, 14, 14);">Unlisted</span>
+                                                    </a>
+                                                  <% } %>
+                                                </li>
+                                                <td>
+                                                <ul>
+                                                    <li>
+                                                      
+                                                      <a href="/admin/categoryEdit?id=<%= category._id %>" class="btn btn-sm btn-light">
+                                                        <i class="fas fa-edit"></i> Edit
+                                                      </a>
+                                                    </li>
+                                                  </ul>
+                                                </td>
+
+                                              </td>
+                                            </tr>
+                                          <% }); %>
+                                        <% } %>
+                                      </tbody>
+                                      
+                                      
+                                </table>
+                                <!-- Pagination -->
+                              <div class="pagination-area mt-30 mb-50">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination justify-content-start">
+                                        <% if (currentPage > 1) { %>
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page=<%= currentPage - 1 %>">
+                                                    <i class="material-icons md-chevron_left"></i>
+                                                </a>
+                                            </li>
+                                        <% } %>
+                                        <% for (let i = 1; i <= totalPages; i++) { %>
+                                            <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                                                <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                                            </li>
+                                        <% } %>
+                                        <% if (currentPage < totalPages) { %>
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page=<%= currentPage + 1 %>">
+                                                    <i class="material-icons md-chevron_right"></i>
+                                                </a>
+                                            </li>
+                                        <% } %>
+                                    </ul>
+                                </nav>
+                              </div>
+                            </div>
+                        </div> <!-- .col// -->
+                    </div> <!-- .row // -->
+                </div> <!-- card body .// -->
+            </div> <!-- card .// -->
+            
+        </section> <!-- content-main end// -->
+        
+        
+
+        <%- include('adminFooter') %>

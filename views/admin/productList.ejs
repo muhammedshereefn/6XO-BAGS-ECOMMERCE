@@ -1,0 +1,120 @@
+
+<%- include('adminHeader') %>
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Products List</h2>
+                    <p>Your product details are here.</p>
+                </div>
+                <div>
+                   
+                    <a href="/admin/addproduct" class="btn btn-primary btn-sm rounded">Create new</a>
+                </div>
+            </div>
+            <div class="card mb-4">
+                <header class="card-header">
+                    <div class="row align-items-center">
+                        
+                        
+                       
+                        
+                    </div>
+                </header> <!-- card-header end// -->
+                <div class="card-body">
+                    <div class="card mb-4">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Sl.No</th>
+                                    <th>Product Images</th>
+                                    <th>Product Name</th>
+                                    <th>Price</th>
+                                    <th>Brand</th>
+                                    <th>Quantity</th>
+                                    <th>Category</th>
+                                    <th>Status</th>
+                                    <th>Edit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if(products.length>0){  %>
+                                    <% for(let i=0;i<products.length;i++){%>
+                                        <tr>
+                                            
+                                            <td><%-i+1%></td>
+                                            <td><img src="<%-products[i].coverimage%>" style="width: 50px; height: 40px;" alt=""> </td>
+                                            <td><%- products[i].name%></td>
+                                            <td><%- products[i].price%></td>
+                                            <td><%- products[i].brand%></td>
+                                            <td><%- products[i].quantity%></td>
+                                            
+                                            <td><%-products[i].category%></td>
+                                            
+                                            <td>
+                                                    <li>
+                                                      <%  if(products[i].status===true){  %>
+                                                        <a href="/admin/productblock?id=<%= products[i]._id %>">
+                                                       
+                                                        <span style="color: rgb(39, 125, 95);">Listed</span>  </a> 
+                                                       <% }else{ %>
+                                                        <a href="/admin/productunblock?id=<%=products[i]._id %>">
+                                                        
+                                                        <span style="color: rgb(172, 14, 14);">Unlisted</span></a>
+                                                    </li>
+                                                    <% }%>
+    
+                                            </td>
+                                            
+                                            <td>
+                                                <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
+                                                    <a href="/admin/editproduct?id=<%- products[i]._id%>" class="btn btn-sm font-sm rounded btn-brand">
+                                                        Edit
+                                                    </a>
+                                                    
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                   <% }%>
+                                <%}%>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                    
+                </div> <!-- card-body end// -->
+            </div> <!-- card end// -->
+           <!-- Your existing product list rendering logic -->
+
+<!-- Pagination -->
+<div class="pagination-area mt-30 mb-50">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-start">
+            <% if (currentPage > 1) { %>
+                <li class="page-item">
+                    <a class="page-link" href="?page=<%= currentPage - 1 %>">
+                        <i class="material-icons md-chevron_left"></i>
+                    </a>
+                </li>
+            <% } %>
+            <% for (let i = 1; i <= totalPages; i++) { %>
+                <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                    <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                </li>
+            <% } %>
+            <% if (currentPage < totalPages) { %>
+                <li class="page-item">
+                    <a class="page-link" href="?page=<%= currentPage + 1 %>">
+                        <i class="material-icons md-chevron_right"></i>
+                    </a>
+                </li>
+            <% } %>
+        </ul>
+    </nav>
+</div>
+
+        </section> <!-- content-main end// -->
+       
+<%- include('adminFooter') %>

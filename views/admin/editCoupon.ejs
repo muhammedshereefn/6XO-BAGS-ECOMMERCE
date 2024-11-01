@@ -1,0 +1,55 @@
+<%- include('adminHeader') %>
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Create Coupon</h2>
+            <p>Fill in the details to create a new coupon.</p>
+        </div>
+        <div>
+            <a href="/admin/loadCreateCoupon" class="btn btn-primary btn-sm rounded">Back to Coupon List</a>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-body">
+            <form action="/admin/editingCoupon" method="post">
+                <!-- Coupon Code -->
+                <div class="mb-3">
+                    <label for="couponCode" class="form-label">Coupon Code</label>
+                    <input type="text" class="form-control" id="couponCode" name="code" required value="<%= coupon.code %>">
+                </div>
+
+                <!-- Discount Percentage -->
+                <div class="mb-3">
+                    <label for="discountPercentage" class="form-label">Discount Percentage</label>
+                    <input type="number" class="form-control" id="discountPercentage" name="discountPercentage" min="1" max="100" required value="<%= coupon.discountPercentage %>">
+                </div>
+
+                <!-- Minimum Amount -->
+                <div class="mb-3">
+                    <label for="minimumAmount" class="form-label">Minimum Amount</label>
+                    <input type="number" class="form-control" id="minimumAmount" name="minimumAmount" min="0" required value="<%= coupon.minimumAmount %>">
+                </div>
+
+                <!-- Expiration Date -->
+                <div class="mb-3">
+                    <label for="expirationDate" class="form-label">Expiration Date</label>
+                    <input type="date" class="form-control" id="expirationDate" name="expirationDate" required>
+                </div>
+
+                <!-- Coupon Status (Active/Inactive) -->
+                <div class="mb-3">
+                    <label for="couponStatus" class="form-label">Coupon Status</label>
+                    <select class="form-select" id="couponStatus" name="couponStatus" required>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary">Edit Coupon</button>
+            </form>
+        </div>
+    </div>
+</section> <!-- content-main end// -->
+
+<%- include('adminFooter') %>

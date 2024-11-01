@@ -1,0 +1,149 @@
+<%- include('userSubHeader') %>
+
+<div class="container">
+    <div class="card-body">
+        <form method="post" name="enq" action="/editAddress/<%= address._id %>">
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label>House Number <span class="required">*</span></label>
+                    <input required="" class="form-control square" name="houseNo" type="text" value="<%- address.houseNo %>">
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Street <span class="required">*</span></label>
+                    <input required="" class="form-control square" name="street" value="<%- address.street %>">
+                </div>
+                <div class="form-group col-md-12">
+                    <label>Landmark</label>
+                    <input class="form-control square" name="landmark" type="text" value="<%- address.landmark%>">
+                </div>
+                <div class="form-group col-md-12">
+                    <label>Pincode <span class="required">*</span></label>
+                    <input required="" class="form-control square" name="pincode" type="text" value="<%- address.pincode %>">
+                </div>
+                <div class="form-group col-md-12">
+                    <label>City <span class="required">*</span></label>
+                    <input required="" class="form-control square" name="city" type="text" value="<%- address.city %>">
+                </div>
+                <div class="form-group col-md-12">
+                    <label>District</label>
+                    <input class="form-control square" name="district" type="text" value="<%- address.district %>">
+                </div>
+                <div class="form-group col-md-12">
+                    <label>State <span class="required">*</span></label>
+                    <input required="" class="form-control square" name="state" type="text" value="<%- address.state %>">
+                </div>
+                <div class="form-group col-md-12">
+                    <label>Country <span class="required">*</span></label>
+                    <input required="" class="form-control square" name="country" type="text" value="<%- address.country %>">
+                </div>
+                <div class="form-group col-md-12">
+                  <label>Phone Number <span class="required">*</span></label>
+                  <input required="" class="form-control square" name="phoneNumber" type="text"  value="<%- address.phoneNumber %>">
+              </div>
+                <div class="form-group col-md-12">
+                    <label>Address Type <span class="required">*</span></label>
+                    <select class="form-control square" name="addressType" required>
+                        <option value="home">Home</option>
+                        <option value="work">Work</option>
+                        <option value="temp">Temporary</option>
+                    </select>
+                </div>
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-fill-out submit" name="submit" value="Submit">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+   
+<footer class="main" style="background-color: #000000;">
+
+        
+
+    <section class="section-padding footer-mid">
+        <div class="container pt-15 pb-20">
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <div class="widget-about font-md mb-md-5 mb-lg-0">
+                        <div class="logo logo-width-1 wow fadeIn animated">
+                            <h3><a href="/home" class="text-white">6XO<span style="color: #e44d26;"> BAGS</span></a></h3>
+                        </div>
+                        <h5 class="mt-20 mb-10 fw-600 text-white wow fadeIn animated">Contact</h5>
+
+                        <p class="wow fadeIn animated text-white pb-25">
+                            <strong>Phone: </strong>7876356476
+                        </p>
+         
+                        <!-- <h5 class="mb-10 mt-30 fw-600 text-white wow fadeIn animated">Follow Us</h5>
+                        <div class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0">
+                            <a href="#" ><img  src="/user/assets/imgs/theme/icons/icon-facebook.svg" alt=""></a>
+                        
+                            <a href="#"><img src="/user/assets/imgs/theme/icons/icon-instagram.svg" alt=""></a>
+              
+                            <a href="#"><img src="/user/assets/imgs/theme/icons/icon-youtube.svg" alt=""></a>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 text-white">
+                    <h5 class="widget-title wow fadeIn animated text-white">About</h5>
+                    <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0 ">
+                        <li ><a href="#" class="text-white">About Us</a></li>
+                        <li><a href="#" class="text-white">Contact Us</a></li>
+                        <li><a href="#" class="text-white">Support Center</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2  col-md-3">
+                    <h5 class="widget-title wow fadeIn animated text-white">My Account</h5>
+                    <ul class="footer-list wow fadeIn animated">
+                        <li><a href="/login" class="text-white">Sign In</a></li>
+                        <li><a href="/cart" class="text-white">View Cart</a></li>
+
+                        <li><a href="/orders" class="text-white">Order</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</footer>
+  <!-- Preloader Start -->
+  <div id="preloader-active">
+    <div class="preloader d-flex align-items-center justify-content-center">
+      <div class="preloader-inner position-relative">
+        <div class="text-center">
+          <h5 class="mb-5">Now Loading</h5>
+          <div class="loader">
+            <div class="bar bar1"></div>
+            <div class="bar bar2"></div>
+            <div class="bar bar3"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Vendor JS-->
+  <script src="/user/assets/js/vendor/modernizr-3.6.0.min.js"></script>
+  <script src="/user/assets/js/vendor/jquery-3.6.0.min.js"></script>
+  <script src="/user/assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+  <script src="/user/assets/js/vendor/bootstrap.bundle.min.js"></script>
+  <script src="/user/assets/js/plugins/slick.js"></script>
+  <script src="/user/assets/js/plugins/jquery.syotimer.min.js"></script>
+  <script src="/user/assets/js/plugins/wow.js"></script>
+  <script src="/user/assets/js/plugins/jquery-ui.js"></script>
+  <script src="/user/assets/js/plugins/perfect-scrollbar.js"></script>
+  <script src="/user/assets/js/plugins/magnific-popup.js"></script>
+  <script src="/user/assets/js/plugins/select2.min.js"></script>
+  <script src="/user/assets/js/plugins/waypoints.js"></script>
+  <script src="/user/assets/js/plugins/counterup.js"></script>
+  <script src="/user/assets/js/plugins/jquery.countdown.min.js"></script>
+  <script src="/user/assets/js/plugins/images-loaded.js"></script>
+  <script src="/user/assets/js/plugins/isotope.js"></script>
+  <script src="/user/assets/js/plugins/scrollup.js"></script>
+  <script src="/user/assets/js/plugins/jquery.vticker-min.js"></script>
+  <script src="/user/assets/js/plugins/jquery.theia.sticky.js"></script>
+  <!-- Template  JS -->
+  <script src="/user/assets/js/main.js?v=3.4"></script>
+</body>
+</html>

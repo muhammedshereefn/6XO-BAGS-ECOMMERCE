@@ -1,0 +1,64 @@
+<%- include('adminHeader') %>
+
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Coupon Creation</h2>
+            <p>Create new coupons for your products.</p>
+        </div>
+        <div>
+            <a href="/admin/loadAddCoupon" class="btn btn-primary btn-sm rounded">Create new coupon</a>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <header class="card-header">
+            <div class="row align-items-center">
+            </div>
+        </header>
+        <!-- card-header end// -->
+        <div class="card-body">
+            <div class="card mb-4">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Coupon Code</th>
+                            <th>Discount Percentage</th>
+                            <th>Minimum Amount</th>
+                            <th>Expiration Date</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% coupons.forEach(coupon => { %>
+                            <tr>
+                                <td><%= coupon.code %></td>
+                                <td><%= coupon.discountPercentage %></td>
+                                <td><%= coupon.minimumAmount %></td>
+                                <td><%= coupon.expirationDate.toISOString().split('T')[0] %></td>
+                                
+                                <td>
+                                    <div class="col-lg-2 col-sm-2 col-4 col-action text-end pt-2">
+                                        <a href="/admin/deleteCoupon?id=<%=coupon._id%>" class="btn btn-md rounded font-sm">Delete</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section> <!-- content-main end// -->
+
+
+<!-- Pagination -->
+<div class="pagination-area mt-30 mb-50">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-start">
+            <!-- Pagination links, if needed, can be added here -->
+        </ul>
+    </nav>
+</div>
+
+
+<%- include('adminFooter') %>

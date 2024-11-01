@@ -1,0 +1,17 @@
+<%- include('adminHeader') %>
+    <div class="container mt-4">
+        <h2>Edit Category</h2>
+        <form action="/admin/editingcat" method="post" >
+            <div class="form-group mt-5">
+                <label for="categoryName">Category Name</label>
+                <input type="text" value="<%-category.name%>" class="form-control" id="categoryName" name="name" placeholder="Enter category name">
+            </div>
+            <div class="form-group mt-5">
+                <label for="categoryDescription">Category Description</label>
+                <textarea class="form-control" value="<%-category.description%>" id="categoryDescription" name="description" placeholder="Enter category description"><%-category.description%></textarea>
+            </div>
+            <input type="hidden" name="id" value="<%- category._id%>">
+            <button type="submit" class="btn btn-primary mt-5">Edit</button>
+        </form>
+    
+        

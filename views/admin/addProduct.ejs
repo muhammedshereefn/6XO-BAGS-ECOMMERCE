@@ -1,0 +1,233 @@
+<%- include ('adminHeader')%>
+
+
+<section class="content-main">
+    <form action="/admin/addproduct" method="post" enctype="multipart/form-data" onsubmit="return validate()">
+        <div class="row">
+            <div class="col-9">
+                <div class="content-header">
+                    <h2 class="content-title">Add New Product</h2>
+                    <div>
+                        <button type="submit" class="btn btn-md rounded font-sm hover-up">Publish</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label for="product_title" class="form-label">Product title</label>
+                            <input name="name" type="text" placeholder="Type here" class="form-control" id="product_title" >
+                            <p id="nameError"></p>
+                        </div>
+                        <div class="row gx-3">
+                            
+                           
+                            <div class="col-md-4 mb-3">
+                                <label for="product_size" class="form-label">Quantity</label>
+                                <input type="text" name="quantity" placeholder="Type here" class="form-control" id="product_size">
+                                <p id="quantityError"></p>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="product_brand" class="form-label">Brand</label>
+                            <input type="text" name="brand" placeholder="Type here" class="form-control" id="product_brand">
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div>
+                            <label class="form-label">Description</label>
+                            <textarea name="description" placeholder="Type here" class="form-control" rows="4" id="product_description"></textarea>
+                            <p id="descriptionError"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div>
+                            <label class="form-label">Cover Images</label>
+                            <input type="file" accept="image/*" id="images" name="coverimage" multiple>
+                        </div>
+                    </div>
+                    <!-- <div class="card-body"> -->
+                        <!-- <div>
+                            <label class="form-label">Images</label>
+                            <input name="images" class="form-control" type="file" multiple required>
+                        </div> -->
+
+
+                        <center>
+                            <button style="display: none;" class="btn btn-warning p-2 px-5 border-2 mt-2" type="button" id="saveposter" onclick="uploadCroppedImage('poster')">Save</button>
+                            <button style="display: none;" class="btn btn-danger p-2 px-5 border-2 mt-2" type="button" id="cancelposter">Cancel</button>
+                        
+                            <label for="Images" style="float: left; margin-left: 1rem;">Images</label>
+                        
+                            <p style="color: red; margin-top: 10px;" id="err15"></p>
+                            <input type="file" name="images" style="margin-top: 20px;" id="Img1" accept="image/*" required>
+                            <button type="button" class="btn btn-md rounded font-sm hover-up" onclick="loadImage('Img1')">Crop</button>
+                            <img src="" id="showImg1" style="width: auto; height: 250px; margin-top: 20px;" alt="">
+                            <button style="display: none;" class="btn btn-warning p-2 px-5 border-2 mt-2" type="button" id="saveImg1" onclick="uploadCroppedImage('Img1')">Save</button>
+                            <button style="display: none;" class="btn btn-danger p-2 px-5 border-2 mt-2" type="button" id="cancelImg1">Cancel</button>
+                            
+                            <p style="color: red; margin-top: 10px;" id="err16"></p>
+                            <input type="file" name="images" style="margin-top: 20px;" id="Img2" accept="image/*" required>
+                            <button type="button" class="btn btn-md rounded font-sm hover-up" onclick="loadImage('Img2')">Crop</button>
+                            <img src="" id="showImg2" style="width: auto; height: 250px; margin-top: 20px;" alt="">
+                            <button style="display: none;" class="btn btn-warning p-2 px-5 border-2 mt-2" type="button" id="saveImg2" onclick="uploadCroppedImage('Img2')">Save</button>
+                            <button style="display: none;" class="btn btn-danger p-2 px-5 border-2 mt-2" type="button" id="cancelImg2">Cancel</button>
+                            
+                            <p style="color: red; margin-top: 10px;" id="err17"></p>
+                            <input type="file" name="images" id="Img3" style="margin-top: 20px;" accept="image/*" required>
+                            <button type="button" class="btn btn-md rounded font-sm hover-up" onclick="loadImage('Img3')">Crop</button>
+                            <img src="" id="showImg3" style="width: auto; height: 250px; margin-top: 20px;" alt="">
+                            <button style="display: none;" class="btn btn-warning p-2 px-5 border-2 mt-2" type="button" id="saveImg3" onclick="uploadCroppedImage('Img3')">Save</button>
+                            <button style="display: none;" class="btn btn-danger p-2 px-5 border-2 mt-2" type="button" id="cancelImg3">Cancel</button>
+                        </center>
+
+
+
+                    <!-- </div> -->
+                </div>
+            </div>
+            <!-- <div class="col-lg-3">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label class="form-label">Price</label>
+                            <input type="text" name="price" placeholder="Type here" class="form-control">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Status</label>
+                            <select class="form-select">
+                                <option>Listed</option> -->
+                               
+
+
+
+                                <div class="col-lg-3">
+                                    <div class="card mb-4">
+                                        <div class="card-body">
+                                            <div class="mb-4">
+                                                <label class="form-label" for="product_price">Offer Price</label>
+                                                <input type="text" name="price" placeholder="Type here" class="form-control" id="product_price">
+                                                <p id="priceError"></p>
+                                            </div>
+
+                                            <div class="mb-4">
+                                                <label class="form-label" for="real_price">Real Price</label>
+                                                <input type="text" name="realPrice" placeholder="Type here" class="form-control" id="real_price">
+                                               
+                                            </div>
+
+                                            <div class="mb-4">
+                                                <label class="form-label" for="product_status">Category</label>
+                                                <select class="form-select" name="category" id="product_status">
+                                                    <% cata.forEach(element => { %>
+                                                        <option ><%= element.name %></option>
+                                                    <% }) %>
+                                                    
+                                                    
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                
+                                <script>
+                                    let cropper;
+                              
+                                  const updateProductForm = document.getElementById('updateProductForm');
+                                  updateProductForm.addEventListener('submit', async (e) => {
+                                      e.preventDefault();
+                                      let result = await Swal.fire({
+                                          title: 'Do you want to save the changes?',
+                                          showDenyButton: true,
+                                          showCancelButton: true,
+                                          confirmButtonText: 'Save',
+                                          denyButtonText: 'Dont save',
+                                      });
+                                      if (result.isConfirmed) {
+                                          await Swal.fire('Saved!', '', 'success');
+                                          updateProductForm.submit();
+                                      } else if (result.isDenied) {
+                                          await Swal.fire('Changes are not saved', '', 'info');
+                                      }
+                                  });
+                              
+                              
+                              
+                              
+                                  function loadImage(id) {
+    const input = document.getElementById(id);
+    const canvas = document.getElementById(`show${id}`);
+    const file = input.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            canvas.src = e.target.result;
+            document.getElementById(`save${id}`).style.display = 'block';
+            document.getElementById(`cancel${id}`).style.display = 'block';
+
+            if (cropper) {
+                cropper.destroy();
+            }
+
+            cropper = new Cropper(canvas, {
+                viewMode: 2,
+                zoomable: true,
+                aspectRatio: 404 / 468, // Use the aspect ratio of your fixed container size
+                width: 404, // Set the desired width for the cropped image
+                height: 468, // Set the desired height for the cropped image
+            });
+        };
+
+        reader.readAsDataURL(file);
+    } else {
+        canvas.src = '';
+        if (cropper) {
+            cropper.destroy();
+        }
+    }
+}
+
+                              
+                              function uploadCroppedImage(id) {
+                                  const canvas = cropper.getCroppedCanvas();
+                                 
+                                  if (canvas) {
+                                      canvas.toBlob((blob) => {
+                                          const fileName = 'cropped_image.jpg';
+                                          const file = new File([blob], fileName, { type: 'image/jpeg' });
+                                          const input = document.getElementById(id);
+                              
+                                          if (DataTransfer && FileList) {
+                                              const dataTransfer = new DataTransfer();
+                                              dataTransfer.items.add(file);
+                                              input.files = dataTransfer.files;
+                                          } else {
+                                              console.error('FileList and DataTransfer are not supported in this browser.');
+                                          }
+                              
+                                          const showImg = document.getElementById(`show${id}`);
+                                          showImg.src = URL.createObjectURL(blob);
+                              
+                                          cropper.destroy();
+                                          document.getElementById(`save${id}`).style.display = 'none';
+                                          document.getElementById(`cancel${id}`).style.display = 'none';
+                                      });
+                                  }
+                              }
+                              
+                              
+                              
+                              </script>
+                                
+        
+  
+
+    <%- include ('adminFooter')%>   

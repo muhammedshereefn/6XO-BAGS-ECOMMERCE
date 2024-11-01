@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>6XO BAGS</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:title" content="" />
+    <meta property="og:type" content="" />
+    <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
+    <!-- Favicon -->
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      href="/Images/6XOLOGO.png"
+    />
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="/user/assets/css/main.css?v=3.4" />
+  </head>
+
+  <style>
+    .logo h2 {
+        font-family: 'Smooch', sans-serif;
+        font-size: 2.5em;
+        font-weight: bold;
+        color: #000000;
+        text-decoration: none;
+    }
+</style>
+
+  <body>
+    <!-- Quick view -->
+    <div
+      class="modal fade custom-modal"
+      id="quickViewModal"
+      tabindex="-1"
+      aria-labelledby="quickViewModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6 col-sm-12 col-xs-12">
+               
+                <!-- End Gallery -->
+
+              </div>
+          
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <header class="header-area header-style-1 header-height-2">
+      <div class="header-top header-top-ptb-1 d-none d-lg-block bg-dark">
+        <div class="container">
+          <div class="row align-items-center text-white">
+            <div class="col-xl-3 col-lg-4">
+              <div class="header-info text-white">
+                <ul>
+                  <li>
+                    <i class="fi-rs-smartphone"></i>
+                    <a href="#" class="text-white">+91 7591902596</a>
+                  </li>
+                  <!-- <li>
+                    <i class="fi-rs-marker"></i
+                    ><a href="page-contact.html" class="text-white"
+                      >Our location</a
+                    >
+                  </li> -->
+                </ul>
+              </div>
+            </div>
+            <div class="col-xl-6 col-lg-4">
+              <div class="text-center">
+                <div id="news-flash" class="d-inline-block">
+                  <ul>
+                    <li>
+                      Get Stylish Bags up to 50% off
+                      <a href="/homeProduct">Hurry up!</a>
+                    </li>
+                    <li>Supper Value Deals - Check it now!</li>
+                    <li>
+                     Provide 2 years Warranty for all Bags!
+                      <a href="/homeProduct">Shop now</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-lg-4">
+              <div class="header-info header-info-right">
+                <ul>
+                  <% if(userId!='' ) { %>
+                  <li>
+                    <i class="fi-rs-user"></i
+                    ><a href="/logout" class="text-light">Log out</a>
+                  </li>
+                  <% } else { %>
+                  <li>
+                    <i class="fi-rs-user"></i
+                    ><a href="/login" class="text-light">Log In / Sign Up</a>
+                  </li>
+                  <% } %>
+
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="header-middle header-middle-ptb-1 d-none d-lg-block">
+        <div class="container">
+          <div class="header-wrap">
+            <div class="logo " style="width: 300px;">
+              <h2 style="font-size: 27px; display: inline;">
+                <a href="/home" style="text-decoration: none; color: black;">6<span style="color: #e44d26;">XO BAGS</span></a>
+            </h2>
+                       </div>
+            <div class="header-right">
+              <div class="search-style-2">
+                <form action="#">
+                 
+                  <!-- <input type="text" placeholder="Search for items..." /> -->
+                </form>
+              </div>
+              <div class="header-action-right">
+                <div class="header-action-2">
+                 
+                  <div class="header-action-icon-2">
+                    <a class="mini-cart-icon" href="/cart">
+                      <img
+                        alt="Evara"
+                        src="/user/assets/imgs/theme/icons/icon-cart.svg"
+                      />
+                     
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="header-bottom header-bottom-bg-color sticky-bar">
+        <div class="container">
+          <div class="header-wrap header-space-between position-relative">
+            <div class="logo logo-width-1 d-block d-lg-none">
+              <h2 style="font-size: 27px; display: inline;">
+                <a href="/home" style="text-decoration: none; color: black;">6<span style="color: #e44d26;">XO BAGS</span></a>
+            </h2>
+            
+            </div>
+
+            <div class="header-nav d-none d-lg-flex">
+              <!-- -->
+              <div
+                class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block"
+              >
+                <nav>
+                  <ul>
+                    <li>
+                      <a href="/home">HOME <i class=""></i></a>
+                    </li>
+                    <li>
+                      <a href="/homeProduct">SHOP</a>
+                    </li>
+               
+                    <li class="position-static">
+                      <a href="/profile">PROFILE <i class=""></i></a>
+                    </li>
+                    <li>
+                      <a href="/orders">ORDERS <i class=""></i></a>
+                    </li>
+
+                    <li>
+                      <a href="page-contact.html">CONTACT</a>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+            <div class="hotline d-none d-lg-block">
+            
+            </div>
+            <p class="mobile-promotion">
+              Happy <span class="text-brand">Mother's Day</span>. Big Sale Up to
+              40%
+            </p>
+            <div class="header-action-right d-block d-lg-none">
+              <div class="header-action-2">
+               
+                <div class="header-action-icon-2">
+                  <a class="mini-cart-icon" href="/cart">
+                    <img
+                      alt="Evara"
+                      src="/user/assets/imgs/theme/icons/icon-cart.svg"
+                    />
+                    <span class="pro-count white">2</span>
+                  </a>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div class="mobile-header-active mobile-header-wrapper-style">
+      <div class="mobile-header-wrapper-inner">
+        <div class="mobile-header-top">
+          <div class="mobile-header-logo">
+            <a href="index.html"
+              ><img src="/user/assets/imgs/theme/logo.svg" alt="logo"
+            /></a>
+          </div>
+          <div
+            class="mobile-menu-close close-style-wrap close-style-position-inherit"
+          >
+            <button class="close-style search-close">
+              <i class="icon-top"></i>
+              <i class="icon-bottom"></i>
+            </button>
+          </div>
+        </div>
+      
+      </div>
+    </div>
+  </body>
+</html>

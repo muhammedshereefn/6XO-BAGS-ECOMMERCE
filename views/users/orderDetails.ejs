@@ -1,0 +1,312 @@
+<%- include('userSubHeader') %>
+ 
+<div class="container pt-4">
+ <section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">ORDER <span style="color: #e44d26;">DETAILS</span></h2>
+            
+            <p>ODR<%= order._id.toString().replace(/\D/g, '').slice(-6) %></p>
+        </div>
+    </div>
+    <div class="card">
+        <header class="card-header">
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
+                    <% if (order.status !== "Cancelled" && order.status !== "Delivered") { %>
+                        <button type="button" class="btn btn-danger bg-dark" onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
+                    <% } %>
+                </div>
+                <div class="col-lg-6 col-md-6 ms-auto text-md-end">
+                    
+                    <a class="btn btn-primary bg-dark" href=" /invoice?id=<%= order._id%> ">Invoice</a>
+         
+                </div>
+            </div>
+        </header> <!-- card-header end// -->
+        <div class="card-body">
+            <div class="row mb-50 mt-20 order-info-wrap">
+                <div class="col-md-4">
+                    <article class="icontext align-items-start">
+                        <span class="icon icon-sm rounded-circle bg-primary-light">
+                            <i class="text-primary material-icons md-person"></i>
+                        </span>
+                        <div class="text">
+                            <h6 class="mb-1 text-danger">Your Info</h6>
+                            <p class="mb-1">
+                                <%= order.user.name%> <br>  <%= order.user.email%>  <br>   <%= order.user.mobile%> 
+
+                            </p>
+                            <a href="/profile">View profile</a>
+                        </div>
+                    </article>
+                </div> <!-- col// --> 
+                <div class="col-md-4">
+                    <article class="icontext align-items-start">
+                        <span class="icon icon-sm rounded-circle bg-primary-light">
+                            <i class="text-primary material-icons md-local_shipping"></i>
+                        </span>
+                        <div class="text">
+                            <h6 class="mb-1 text-danger" >Order Info</h6>
+                            <p class="mb-1">
+                                Pay method: <%= order.paymentMethod %><br> Status: <%=order.status%>
+                            </p>
+                            <p style="font-size: 13px; padding-bottom: 15px; color: rgb(0, 183, 18);" class="mt-2">Delivered within 3 business days</p>
+
+                        </div>
+                    </article>
+                </div> <!-- col// -->
+                <div class="col-md-4">
+                    <article class="icontext align-items-start">
+                        <span class="icon icon-sm rounded-circle bg-primary-light">
+                            <i class="text-primary material-icons md-place"></i>
+                        </span>
+                        <div class="text">
+                            <h6 class="mb-1 text-danger">Deliver to</h6>
+                            <p class="mb-1">
+                                <%= order.address[0].houseNo %> <%= order.address[0].street %><br>
+                                <%= order.address[0].landmark ? `${order.address[0].landmark},` : '' %>
+                                <%= order.address[0].city %>, <%= order.address[0].district %>, <%= order.address[0].state %>, <%= order.address[0].country %><br>
+                                Pincode: <%= order.address[0].pincode %>
+                                <br>
+                                Phone: <%= order.address[0].phoneNumber %>
+                            </p>
+                            <a href="/profile">View profile</a>
+                        </div>
+                    </article>
+                </div> <!-- col// -->
+            </div> <!-- row // -->
+            <div class="row">
+                <div class="col-lg-7">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                   
+                                    <th width="40%">Product</th>
+                                    <th width="20%">Brand</th>
+                                    <th width="20%">Quantity</th>
+                                    
+                                    
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% order.products.forEach(order=>{  %>
+                                <tr>
+                                    
+                                   
+                                   
+                                    <td>
+
+                                
+                                        <a class="itemside" href="#">
+                                            <div class="left">
+                                                <img src="<%= order.product.coverimage %>" width="40" height="40" class="img-xs" alt="Item">
+                                            </div>
+                                            <div class="info"><%=  order.product.name  %></div>
+                                        </a>
+                                    </td>
+
+                                    <td><%=  order.product.brand %></td>
+                                    <td> <%=  order.quantity  %></td>
+                                   
+                              
+                                </tr>
+                                <%  }) %>
+                                <tr>
+                                    <td colspan="4">
+                                        <article class="float-end">
+                                          
+                                            <br>
+                                            <dl class="dlist">
+                                                <dt>Gross :</dt>
+                                                <dd> <b class="h5 bg-light">₹<%= order.grandTotal %></b>.00 </dd>
+                                            </dl>
+                                           
+                                        </article>
+                                    </td>
+                                    
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div> <!-- table-responsive// -->
+                   
+                    <!-- <a class="btn btn-primary bg-dark" href="page-orders-tracking.html">View Order Tracking</a> -->
+                   
+                </div> <!-- col// -->
+                <div class="col-lg-1"></div>
+                <div class="col-lg-4">
+                    <!-- <div class="box shadow-sm bg-light">
+                        <h6 class="mb-15">Payment info</h6>
+                        <p>
+                            <img src="admin/assets/imgs/card-brands/2.png" class="border" height="20"> Master Card **** **** 4768 <br>
+                            Business name: Grand Market LLC <br>
+                            Phone: +1 (800) 555-154-52
+                        </p>
+                    </div>
+                    <div class="h-25 pt-4">
+                        <div class="mb-3">
+                            <label>Notes</label>
+                            <textarea class="form-control" name="notes" id="notes" placeholder="Type some note"></textarea>
+                        </div>
+                        <button class="btn btn-primary">Save note</button>
+                    </div> -->
+                </div> <!-- col// -->
+            </div>
+        </div> <!-- card-body end// -->
+    </div> <!-- card end// -->
+</section> <!-- content-main end// -->
+
+</div>
+
+<footer class="main" style="background-color: #000000;">
+
+        
+
+    <section class="section-padding footer-mid">
+        <div class="container pt-15 pb-20">
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <div class="widget-about font-md mb-md-5 mb-lg-0">
+                        <div class="logo logo-width-1 wow fadeIn animated">
+                            <h3><a href="/home" class="text-white">6XO<span style="color: #e44d26;"> BAGS</span></a></h3>
+                        </div>
+                        <h5 class="mt-20 mb-10 fw-600 text-white wow fadeIn animated">Contact</h5>
+
+                        <p class="wow fadeIn animated text-white pb-25">
+                            <strong>Phone: </strong>7876356476
+                        </p>
+         
+                        <!-- <h5 class="mb-10 mt-30 fw-600 text-white wow fadeIn animated">Follow Us</h5>
+                        <div class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0">
+                            <a href="#" ><img  src="/user/assets/imgs/theme/icons/icon-facebook.svg" alt=""></a>
+                        
+                            <a href="#"><img src="/user/assets/imgs/theme/icons/icon-instagram.svg" alt=""></a>
+              
+                            <a href="#"><img src="/user/assets/imgs/theme/icons/icon-youtube.svg" alt=""></a>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 text-white">
+                    <h5 class="widget-title wow fadeIn animated text-white">About</h5>
+                    <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0 ">
+                        <li ><a href="#" class="text-white">About Us</a></li>
+                        <li><a href="#" class="text-white">Contact Us</a></li>
+                        <li><a href="#" class="text-white">Support Center</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2  col-md-3">
+                    <h5 class="widget-title wow fadeIn animated text-white">My Account</h5>
+                    <ul class="footer-list wow fadeIn animated">
+                        <li><a href="/login" class="text-white">Sign In</a></li>
+                        <li><a href="/cart" class="text-white">View Cart</a></li>
+
+                        <li><a href="/orders" class="text-white">Order</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</footer>
+  <!-- Preloader Start -->
+  <div id="preloader-active">
+    <div class="preloader d-flex align-items-center justify-content-center">
+      <div class="preloader-inner position-relative">
+        <div class="text-center">
+          <h5 class="mb-5">Now Loading</h5>
+          <div class="loader">
+            <div class="bar bar1"></div>
+            <div class="bar bar2"></div>
+            <div class="bar bar3"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Vendor JS-->
+  <script src="/user/assets/js/vendor/modernizr-3.6.0.min.js"></script>
+  <script src="/user/assets/js/vendor/jquery-3.6.0.min.js"></script>
+  <script src="/user/assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+  <script src="/user/assets/js/vendor/bootstrap.bundle.min.js"></script>
+  <script src="/user/assets/js/plugins/slick.js"></script>
+  <script src="/user/assets/js/plugins/jquery.syotimer.min.js"></script>
+  <script src="/user/assets/js/plugins/wow.js"></script>
+  <script src="/user/assets/js/plugins/jquery-ui.js"></script>
+  <script src="/user/assets/js/plugins/perfect-scrollbar.js"></script>
+  <script src="/user/assets/js/plugins/magnific-popup.js"></script>
+  <script src="/user/assets/js/plugins/select2.min.js"></script>
+  <script src="/user/assets/js/plugins/waypoints.js"></script>
+  <script src="/user/assets/js/plugins/counterup.js"></script>
+  <script src="/user/assets/js/plugins/jquery.countdown.min.js"></script>
+  <script src="/user/assets/js/plugins/images-loaded.js"></script>
+  <script src="/user/assets/js/plugins/isotope.js"></script>
+  <script src="/user/assets/js/plugins/scrollup.js"></script>
+  <script src="/user/assets/js/plugins/jquery.vticker-min.js"></script>
+  <script src="/user/assets/js/plugins/jquery.theia.sticky.js"></script>
+  <!-- Template  JS -->
+  <script src="./user/assets/js/main.js?v=3.4"></script>
+
+
+ 
+
+
+
+ 
+<!-- Add SweetAlert library -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function cancelOrder(orderId) {
+        // Display a confirmation popup using SweetAlert
+        Swal.fire({
+            title: 'Cancel Order',
+            text: 'Are you sure you want to cancel this order?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, cancel it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If user clicks 'Yes', proceed to cancel the order
+                const status = document.getElementById("statusChange");
+                const button = document.getElementById("btnChange");
+
+
+                location.reload();
+
+                // Make a request to the server to cancel the order
+                fetch(`/cancelOrder/${orderId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data.message);
+
+                        // Optionally, update the UI to reflect the cancelled status
+                        status.innerHTML = "Cancelled";
+                        button.style.display = "none";
+
+                        // Redirect to the orders page
+                        // window.location.href = "/orders";
+                      
+                    })
+                    .catch(error => {
+                        console.error('Error cancelling order:', error);
+                        // Handle errors as needed
+                    });
+            }
+        });
+    }
+</script>
+
+
+
+</body>
+</html>

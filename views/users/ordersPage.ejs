@@ -1,0 +1,205 @@
+<%- include('userSubHeader') %>
+
+
+
+<div class="container mt-4 mb-4">
+
+  <h3 style="font-size: 25px; font-weight: bold; color: #333; text-transform: uppercase; letter-spacing: 2px;" class="pb-4"><span style="color: #e44d26;">O</span>RDERS</h3>
+
+  <% orders.forEach(order => { %>
+      <div class="card mt-4">
+       
+          <div class="card-body bg-white">
+              <div class="mb-4">
+                  <h5 style="padding-bottom: 15px;">Order Status: <span class="text-success"><%= order.status %></span></h5>
+                  <h6>PRODUCT DETAILS</h6>
+                  <ul class="list-group">
+                      <% order.products.forEach(product => { %>
+                          <li class="list-group-item d-flex justify-content-between align-items-center">
+                              <div class="d-flex align-items-center">
+                                <a href="/productdetails/<%= product.product._id %>">
+                                    <img src="<%= product.product.coverimage %>" alt="<%= product.product.name %>" class="mr-3" style="width: 50px; height: 50px; object-fit: cover;">
+                                </a>
+                                  <div>
+                                      <%= product.product.name %> - Quantity: <%= product.quantity %>
+                                  </div>
+                              </div>
+                              <!-- Button to cancel the item -->
+                              <% if (order.status !== "Cancelled" && order.status !== "Delivered" && order.products.length > 1) { %>
+                                  <button type="button" class="btn btn-danger btn-sm bg-dark" onclick="cancelItem('<%= order._id %>', '<%= product._id %>')">Cancel Item</button>
+                              <% } %>
+                          </li>
+                      <% }); %>
+                  </ul>
+                  <p style="font-size: 13px; padding-bottom: 15px;" class="mt-2">Order Date: <%= order.createdAt.toDateString() %></p>
+                  <% if (order.status !== "Delivered" && order.status !== "Cancelled") { %>
+                    <p style="font-size: 13px; padding-bottom: 15px; color: red;" class="mt-2">Delivered within 3 business days</p>
+                  <% } %>
+                  <!-- Button to cancel the entire order -->
+                  <a href="/userOrderDetail?id=<%- order._id%>" class="btn  rounded font-sm bg-dark" style="font-size: 12px;">VIEW ORDER DETAILS</a>
+                  <% if (order.status !== "Cancelled" && order.status !== "Delivered") { %>
+                      <button type="button" class="btn btn-danger bg-dark" onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
+                  <% } %>
+              </div>
+          </div>
+      </div>
+  <% }); %>
+</div>
+
+
+
+
+<!-- Add this script to your HTML file, after including SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script>
+  const cancelItem = async (orderId, productId) => {
+      // Display SweetAlert confirmation
+      const confirmResult = await Swal.fire({
+          icon: 'question',
+          title: 'Confirm Item Cancellation',
+          text: 'Are you sure you want to cancel this item?',
+          showCancelButton: true,
+          confirmButtonText: 'Yes',
+          cancelButtonText: 'No',
+      });
+
+      if (confirmResult.isConfirmed) {
+          try {
+              const response = await fetch(`/cancelItem/${orderId}/${productId}`, {
+                  method: 'DELETE',
+                  headers: {
+                      'Content-Type': 'application/json',
+                  },
+              });
+
+              if (response.ok) {
+                  // Display SweetAlert success message
+                  Swal.fire({
+                      icon: 'success',
+                      title: 'Item Cancelled',
+                      text: 'The item has been cancelled successfully.',
+                  }).then(() => {
+                      // Reload the page or perform any other action
+                      location.reload();
+                  });
+              } else {
+                  // Handle error
+                  console.error('Error cancelling item:', response.statusText);
+                  // Display SweetAlert error message
+                  Swal.fire({
+                      icon: 'error',
+                      title: 'Error',
+                      text: 'An error occurred while cancelling the item.',
+                  });
+              }
+          } catch (error) {
+              console.error('Error:', error);
+          }
+      }
+  };
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  <!-- Preloader Start -->
+  <div id="preloader-active">
+    <div class="preloader d-flex align-items-center justify-content-center">
+      <div class="preloader-inner position-relative">
+        <div class="text-center">
+          <h5 class="mb-5">Now Loading</h5>
+          <div class="loader">
+            <div class="bar bar1"></div>
+            <div class="bar bar2"></div>
+            <div class="bar bar3"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Vendor JS-->
+  <script src="/user/assets/js/vendor/modernizr-3.6.0.min.js"></script>
+  <script src="/user/assets/js/vendor/jquery-3.6.0.min.js"></script>
+  <script src="/user/assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+  <script src="/user/assets/js/vendor/bootstrap.bundle.min.js"></script>
+  <script src="/user/assets/js/plugins/slick.js"></script>
+  <script src="/user/assets/js/plugins/jquery.syotimer.min.js"></script>
+  <script src="/user/assets/js/plugins/wow.js"></script>
+  <script src="/user/assets/js/plugins/jquery-ui.js"></script>
+  <script src="/user/assets/js/plugins/perfect-scrollbar.js"></script>
+  <script src="/user/assets/js/plugins/magnific-popup.js"></script>
+  <script src="/user/assets/js/plugins/select2.min.js"></script>
+  <script src="/user/assets/js/plugins/waypoints.js"></script>
+  <script src="/user/assets/js/plugins/counterup.js"></script>
+  <script src="/user/assets/js/plugins/jquery.countdown.min.js"></script>
+  <script src="/user/assets/js/plugins/images-loaded.js"></script>
+  <script src="/user/assets/js/plugins/isotope.js"></script>
+  <script src="/user/assets/js/plugins/scrollup.js"></script>
+  <script src="/user/assets/js/plugins/jquery.vticker-min.js"></script>
+  <script src="/user/assets/js/plugins/jquery.theia.sticky.js"></script>
+  <!-- Template  JS -->
+  <script src="./user/assets/js/main.js?v=3.4"></script>
+
+
+ 
+<!-- Add SweetAlert library -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function cancelOrder(orderId) {
+        // Display a confirmation popup using SweetAlert
+        Swal.fire({
+            title: 'Cancel Order',
+            text: 'Are you sure you want to cancel this order?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, cancel it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If user clicks 'Yes', proceed to cancel the order
+                const status = document.getElementById("statusChange");
+                const button = document.getElementById("btnChange");
+
+
+                location.reload();
+
+                // Make a request to the server to cancel the order
+                fetch(`/cancelOrder/${orderId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data.message);
+
+                        // Optionally, update the UI to reflect the cancelled status
+                        status.innerHTML = "Cancelled";
+                        button.style.display = "none";
+
+                        // Redirect to the orders page
+                        // window.location.href = "/orders";
+                      
+                    })
+                    .catch(error => {
+                        console.error('Error cancelling order:', error);
+                        // Handle errors as needed
+                    });
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

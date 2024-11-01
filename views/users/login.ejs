@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url('/images/loginPageImage.jpg'); /* Set your background image */
+            background-size: cover; /* Cover the entire background */
+            background-position: center; /* Center the image */
+            position: relative; /* Position relative to create overlay */
+            height: 100vh; /* Full height */
+            color: white; /* Default text color */
+        }
+        .overlay {
+            position: absolute; /* Position absolute to cover the entire page */
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.558); /* Black background with 50% opacity */
+            z-index: 1; /* Ensure overlay is on top of the background */
+        }
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%; /* Full height of parent */
+            position: relative; /* Position relative to place form correctly */
+            z-index: 2; /* Ensure form is above the overlay */
+        }
+        .login-form {
+            background-color: rgba(255, 255, 255, 0.074);
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%; /* Full width on mobile */
+            max-width: 400px; /* Limit max width */
+        }
+        .signup-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="overlay"></div> <!-- Dark overlay -->
+
+    <div class="login-container">
+      <form class="login-form" action="/login" method="post">
+         <h2 class="text-center mb-4 ">LOGIN</h2>
+         <div class="form-group">
+             <label for="email">Email</label>
+             <input type="email" placeholder="Enter Email" class="form-control rounded-pill" id="email" name="email" required>
+         </div>
+         <div class="form-group">
+             <label for="password">Password</label>
+             <input type="password" placeholder="Enter Password" class="form-control rounded-pill" id="password" name="password" required>
+             <div class="form-check mt-2">
+                 <input type="checkbox" class="form-check-input" id="showPassword">
+                 <label class="form-check-label" for="showPassword">Show Password</label>
+             </div>
+         </div>
+         <button type="submit" class="btn btn-dark text-white btn-block rounded-pill">Login</button>
+         <div class="signup-link text-center mt-3">
+             <span>Don't Have an Account?</span>
+             <a href="/register" class="btn btn-outline-secondary text-white rounded-pill ml-2">Signup now</a>
+         </div>
+         
+     </form>
+     
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Show Password Functionality
+        document.getElementById('showPassword').addEventListener('change', function () {
+            const passwordField = document.getElementById('password');
+            passwordField.type = this.checked ? 'text' : 'password';
+        });
+    </script>
+</body>
+</html>
