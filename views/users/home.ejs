@@ -1,35 +1,127 @@
 ﻿<%- include('userHeader') %>
 
-<div class="" style="width: 100%; height: 15px; background-color: #00000038;"></div>
-<a href="https://wa.me/7591902596" style="position: fixed; bottom: 20px; left: 20px; z-index: 1000; background-color: #25D366; color: white; border-radius: 100%; padding: 8px; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);" target="_blank">
-    <i class="fab fa-whatsapp" style="font-size: 30px;"></i>
-</a>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+<div style="position: fixed; bottom: 20px; right: 20px; background-color: #000; color: #fff; border-radius: 12px; padding: 10px; display: flex; align-items: center; justify-content: space-around; width: 120px; height: 60px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); z-index: 1000;">
+    <a href="https://wa.me/9747333006" target="_blank" style="text-decoration: none; color: #fff;">
+        <i class="fab fa-whatsapp" style="font-size: 24px;"></i>
+    </a>
+    <a href="https://www.instagram.com/6xobags/" target="_blank" style="text-decoration: none; color: #fff;">
+        <i class="fab fa-instagram" style="font-size: 24px;"></i>
+    </a>
+</div>
 
+
+<!-- Include GSAP Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.0/gsap.min.js"></script>
+
+<!-- Modal Overlay -->
+<div id="modalOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.2); z-index: 1000; opacity: 0; transition: opacity 0.5s ease;"></div>
+
+<!-- Modal Structure -->
+<div id="offerModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8); opacity: 0; background-color: #fff; border-radius: 12px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); z-index: 1001; transition: opacity 0.5s ease, transform 0.5s ease; max-width: 500px; width: 90%; text-align: center;">
+    <div id="modalHeader" style="background-color: #000; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 12px 12px 0 0;">
+        <h2 id="offerTitle" style="color: #fff; font-size: 1.5rem; font-weight: bold;"></h2>
+    </div>
+    <div style="padding: 20px;">
+        <p id="offerDescription" style="color: #b30000; font-size: 1.2rem; margin-bottom: 10px;"></p>
+        <div id="timer" style="display: flex; justify-content: center; gap: 5px; margin-bottom: 20px;">
+            <div class="time-box" id="hours">00</div>:
+            <div class="time-box" id="minutes">00</div>:
+            <div class="time-box" id="seconds">00</div>
+        </div>
+        <button onclick="closeModal()" style="padding: 10px 20px; background-color: #000000; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1rem; transition: background-color 0.3s ease;">Shop Now</button>
+    </div>
+</div>
+
+<script>
+    // Use the latestOffer directly from the server-side rendering
+    const latestOffer = <%- JSON.stringify(latestOffer) %>; // Access the latest offer object
+
+    let countdownTime;
+
+    function updateTimer() {
+        if (countdownTime < 0) return;
+        const hours = String(Math.floor(countdownTime / 3600)).padStart(2, '0');
+        const minutes = String(Math.floor((countdownTime % 3600) / 60)).padStart(2, '0');
+        const seconds = String(countdownTime % 60).padStart(2, '0');
+
+        document.getElementById('hours').textContent = hours;
+        document.getElementById('minutes').textContent = minutes;
+        document.getElementById('seconds').textContent = seconds;
+
+        if (countdownTime > 0) {
+            countdownTime--;
+            setTimeout(updateTimer, 1000);
+        }
+    }
+
+    // Show the modal when the page is loaded
+    window.onload = function() {
+        const modal = document.getElementById('offerModal');
+        const overlay = document.getElementById('modalOverlay');
+
+        // Check if there's a valid offer
+        if (latestOffer && Object.keys(latestOffer).length > 0) {
+            // Populate the modal with dynamic data from the latest offer
+            populateModal(latestOffer);
+
+            // Show modal and overlay
+            modal.style.display = 'block';
+            overlay.style.display = 'block';
+
+            // GSAP animations for modal appearance
+            gsap.to(modal, { duration: 0.8, opacity: 1, scale: 1, ease: "power3.out" });
+            gsap.to(overlay, { duration: 0.5, opacity: 1 });
+        }
+    };
+
+    // Function to populate the modal
+    function populateModal(offer) {
+        if (offer) {
+            document.getElementById('offerTitle').textContent = offer.title; // Set offer title
+            document.getElementById('offerDescription').textContent = offer.description; // Set offer description
+            
+            // Set countdown time from offer data
+            countdownTime = (offer.timer.hours * 3600) + (offer.timer.minutes * 60) + offer.timer.seconds; // Set countdown time
+            updateTimer(); // Start the timer
+        }
+    }
+
+    // Function to close the modal
+    function closeModal() {
+        const modal = document.getElementById('offerModal');
+        const overlay = document.getElementById('modalOverlay');
+
+        gsap.to(modal, { duration: 0.5, opacity: 0, scale: 0.8, ease: "power3.in", onComplete: () => { modal.style.display = 'none'; } });
+        gsap.to(overlay, { duration: 0.5, opacity: 0, onComplete: () => { overlay.style.display = 'none'; } });
+    }
+</script>
 
 
 
 
 <section style="position: relative; width: 100%; height: 500px; overflow: hidden;">
-    <div id="banner" style="position: absolute; width: 100%; height: 100%; transition: opacity 1s ease;">
-        <img src="/Images/loginPageImage.jpg" alt="Banner 1" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
-        <img src="/Images/banner2.jpg" alt="Banner 2" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; opacity: 0;">
-        <img src="/Images/registerPage.jpg" alt="Banner 3" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; opacity: 0;">
+    <!-- Image Container -->
+    <div id="banner" style="position: absolute; width: calc(100% - 40px); height: calc(100% - 40px); top: 20px; left: 20px; transition: opacity 1s ease; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+        <img src="/Images/loginPageImage.jpg" alt="Banner 1" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; border-radius: 20px;">
+        <img src="/Images/banner2.jpg" alt="Banner 2" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; border-radius: 20px; opacity: 0;">
+        <img src="/Images/registerPage.jpg" alt="Banner 3" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; border-radius: 20px; opacity: 0;">
     </div>
 
-    <!-- Dark overlay -->
-    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.2); z-index: 0;"></div>
 
-   
-
+    <!-- Text Content -->
     <div style="position: relative; z-index: 1; color: white; text-align: center; padding-top: 150px; font-family: 'Roboto', sans-serif;">
-        <div class="" style="width: 100%; height: 100px; background-color: #00000032;">
-            <h2 style="padding-top: 14px; color: white; font-size: 2.5rem; margin: 0; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);">EXPLORE OUR<span style="color: #ff4747;"> BAGS</span></h2>
-        <p style="color: white; font-size: 1.25rem; margin-top: 10px; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);">Check out our amazing products!</p>
+        <div style="width: calc(100% - 40px); margin: 0 auto; height: 100px; background-color: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 10px;">
+            <h2 style="color: white; font-size: 2.5rem; margin: 0; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);">
+                EXPLORE OUR<span style="color: #ff4747;"> BAGS</span>
+            </h2>
+            <p style="color: white; font-size: 1.25rem; margin-top: 10px; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);">
+                Check out our amazing products!
+            </p>
         </div>
-        
     </div>
 </section>
-<div class="" style="width: 100%; height: 15px; background-color: #000000;"></div>
+
 
 
 <script>
@@ -169,70 +261,97 @@
 
 
                         <div class="row product-grid-4">
-                            <%  products.forEach(product=>{  %>
-                        <div class="col-lg-3 col-md-4 col-12 col-sm-6">
-                            <div class="product-cart-wrap mb-30 border border-dark">
-                                <div class="product-img-action-wrap">
-                                    <div class="product-img product-img-zoom">
-                                        <a href="/productdetails/<%= product._id %>">
-                                            <% if (product.quantity > 0) { %>
-                                                <img class="default-img" style="height: 300px;" src="<%=product.coverimage%>" alt="">
+                            <% products.forEach(product => { %>
+                            <div class="col-lg-3 col-md-4 col-12 col-sm-6">
+                                <div class="product-cart-wrap mb-30 border border-dark" style="position: relative;">
+                                    <!-- Limited Quantity Badge -->
+                                    <% if (product.quantity > 0 && product.quantity <= 5) { %>
+                                    <div style="position: absolute; top: 10px; right: 10px; background-color: #ff4747; color: white; font-size: 12px; font-weight: bold; padding: 5px 10px; border-radius: 8px; z-index: 10; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                                        Limited Stock!
+                                    </div>
+                                    <% } %>
+                        
+                                    <div class="product-img-action-wrap" style="position: relative;">
+                                        <% if (product.offerPercentage) { %>
+                                        <!-- Discount Badge -->
+                                        <div style="
+                                            position: absolute; 
+                                            top: 10px; 
+                                            left: 10px; 
+                                            background-color: #ff4c4c; 
+                                            color: white; 
+                                            font-size: 12px; 
+                                            font-weight: bold; 
+                                            padding: 5px 10px; 
+                                            border-radius: 8px; 
+                                            z-index: 10; 
+                                            text-transform: uppercase; 
+                                            letter-spacing: 1px;
+                                            box-shadow: 0 2px 10px rgba(255, 76, 76, 0.5); 
+                                            animation: pulse 2s infinite;">
+                                            <%= product.offerPercentage %>% OFF
+                                        </div>
+                                        <% } %>
+                                        <div class="product-img product-img-zoom">
+                                            <a href="/productdetails/<%= product._id %>">
+                                                <% if (product.quantity > 0) { %>
+                                                <img class="default-img" style="height: 300px;" src="<%= product.coverimage %>" alt="">
                                                 <% } else { %>
-                                                   <div style="position: relative; height: 300px; display: flex; justify-content: center; align-items:center ;">
-                                                    <div style="z-index: 50000; width: 100%;position: absolute;color: rgb(255, 255, 255); padding-top: 15px;  height: 50px; background-color: rgba(39, 29, 29, 0.344);
-                                                    font-size: 17px; font-weight: 600; text-align: center;">Out Of Stock</div>
-                                                    <img class="default-img " style="height: 300px;   filter: grayscale(100%);
-                                                    " src="<%=product.coverimage%>" alt="">
-                                                    
-                                                   </div>
-                                            <% } %>
-                                            <!-- <img class="hover-img" style="height: 300px;" src="<%=product.coverimage%>" alt=""> -->
-                                        </a>
+                                                <div style="position: relative; height: 300px; display: flex; justify-content: center; align-items: center;">
+                                                    <div style="z-index: 50000; width: 100%; position: absolute; color: rgb(255, 255, 255); padding-top: 15px; height: 50px; background-color: rgba(39, 29, 29, 0.344); font-size: 17px; font-weight: 600; text-align: center;">
+                                                        Out Of Stock
+                                                    </div>
+                                                    <img class="default-img" style="height: 300px; filter: grayscale(100%);" src="<%= product.coverimage %>" alt="">
+                                                </div>
+                                                <% } %>
+                                            </a>
+                                        </div>
                                     </div>
-                                    <div class="product-action-1">
-                                       
-                                       
-                                    </div>
-                                    
-                                </div>
-                                <div class="product-content-wrap bg-light">
-                                    <div class="product-category">
-                                        <a href=""><%=product.category%></a>
-                                    </div>
-                                    <h2><a href="/productdetails/<%= product._id %>" class="text-dark"><%=product.name%></a></h2>
-                                    <div class="rating-result" title="90%">
-                                        <span>
-                                            <span>90%</span>
-                                        </span>
-                                    </div>
-                                    <div class="product-price">
-                                        <span class="text-dark">₹ <%=product.price%> </span>
-                                        <span class="old-price">₹ <%=product.offerPrice%> </span>
-                                        <!-- <span class="old-price"><%=product.price%></span> -->
-                                    </div>
-                                    <div class="product-action-1 show">
-                                        <!-- <a aria-label="Add To Cart" class="action-btn hover-up" href="shop-cart.html"><i class="fi-rs-shopping-bag-add"></i></a> -->
-
+                                    <div class="product-content-wrap bg-light">
+                                        <div class="product-category">
+                                            <a href=""><%= product.category %></a>
+                                        </div>
+                                        <h2><a href="/productdetails/<%= product._id %>" class="text-dark"><%= product.name %></a></h2>
+                        
+                                        <div class="product-price">
+                                            <span class="text-dark">₹ <%= product.price %></span>
+                                            <span class="old-price">₹ <%= product.offerPrice %></span>
+                                        </div>
                                         <div class="product-action-1 show">
-                                          
                                             <% if (product.quantity > 0) { %>
-                                                <a aria-label="Add To Cart" class="action-btn hover-up" onclick="addToCart('<%= product.id %>',event)" href=""><i class="fi-rs-shopping-bag-add"></i></a>
-                                               
-                                                    
+                                            <a aria-label="Add To Cart" class="action-btn hover-up" onclick="addToCart('<%= product.id %>', event)" href="">
+                                                <i class="fi-rs-shopping-bag-add"></i>
+                                            </a>
                                             <% } %>
-                                            
-                               </div>
-
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <% }) %>
+                        
+                            <li class="nav-item" role="presentation"></li>
+                            <button class="nav-link active bg-dark text-white" id="nav-tab-one" type="button"><a href="/homeProduct" class="text-white">SEE MORE PRODUCTS</a></button>
                         </div>
-                        <% }) %>
-
-                        <li class="nav-item" role="presentation"></li>
-                                <button class="nav-link active bg-dark text-white" id="nav-tab-one"   type="button"  ><a href="/homeProduct" class="text-white" >SEE  MORE  PRODUCTS</button>
-                            </li>
-                    </div>
+                        
+                        <!-- Embedded animation -->
+                        <style>
+                        @keyframes pulse {
+                            0% {
+                                transform: scale(1);
+                                box-shadow: 0 2px 10px rgba(255, 76, 76, 0.5);
+                            }
+                            50% {
+                                transform: scale(1.05);
+                                box-shadow: 0 4px 15px rgba(255, 76, 76, 0.8);
+                            }
+                            100% {
+                                transform: scale(1);
+                                box-shadow: 0 2px 10px rgba(255, 76, 76, 0.5);
+                            }
+                        }
+                        </style>
+                        
+                        
 
                         <!--End product-grid-4-->
                     </div>
@@ -878,59 +997,44 @@
        
     </main>
     <footer class="main" style="background-color: #000000;">
-
-        
-
         <section class="section-padding footer-mid">
             <div class="container pt-15 pb-20">
-                <div class="row">
-                    <div class="col-lg-4 col-md-6">
-                        <div class="widget-about font-md mb-md-5 mb-lg-0">
-                            <div class="logo logo-width-1 wow fadeIn animated">
-                                <h2><a href="/home" class="text-white">6XO<span style="color: #e44d26;"> BAGS</span></a></h2>
+                <div class="row justify-content-center text-center text-md-start">
+                    <!-- About Section -->
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="widget-about font-md">
+                            <div class="logo logo-width-1">
+                                <h3><a href="/home" class="text-white">6XO<span style="color: #e44d26;"> BAGS</span></a></h3>
                             </div>
-                            <h5 class="mt-20 mb-10 fw-600 text-white wow fadeIn animated">Contact</h5>
-                            <p class="wow fadeIn animated text-white">
-                                <strong>Address: </strong>562 Wellington Road, Street 32, San Francisco
+                            <h5 class="mt-20 mb-10 fw-600 text-white">Contact</h5>
+                            <p class="text-white">
+                                <strong class="text-success">Phone:</strong> <a href="tel:+919747333006" class="text-white">+91 9747333006</a>
                             </p>
-                            <p class="wow fadeIn animated text-white">
-                                <strong>Phone: </strong>+01 2222 365 /(+91) 01 2345 6789
+                            <p class="text-white">
+                                <strong class="text-success">Mail:</strong> <a href="mailto:6xobags@gmail.com" class="text-white">6xobags@gmail.com</a>
                             </p>
-                            <p class="wow fadeIn animated text-white">
-                                <strong>Hours: </strong>10:00 - 18:00, Mon - Sat
-                            </p>
-                            <!-- <h5 class="mb-10 mt-30 fw-600 text-white wow fadeIn animated">Follow Us</h5>
-                            <div class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0">
-                                <a href="#" ><img  src="/user/assets/imgs/theme/icons/icon-facebook.svg" alt=""></a>
-                            
-                                <a href="#"><img src="/user/assets/imgs/theme/icons/icon-instagram.svg" alt=""></a>
-                  
-                                <a href="#"><img src="/user/assets/imgs/theme/icons/icon-youtube.svg" alt=""></a>
-                            </div> -->
                         </div>
                     </div>
-                    <div class="col-lg-2 col-md-3 text-white">
-                        <h5 class="widget-title wow fadeIn animated text-white">About</h5>
-                        <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0 ">
-                            <li ><a href="#" class="text-white">About Us</a></li>
-                            <li><a href="#" class="text-white">Contact Us</a></li>
-                            <li><a href="#" class="text-white">Support Center</a></li>
+                    <!-- About Links -->
+                    <div class="col-lg-2 col-md-3 col-sm-6 mb-4">
+                        <h5 class="widget-title text-white">About</h5>
+                        <ul class="footer-list list-unstyled">
+                            <li><a href="tel:+919747333006" class="text-white">Contact Us</a></li>
+                            <li><a href="tel:+919747333006" class="text-white">Support Center</a></li>
                         </ul>
                     </div>
-                    <div class="col-lg-2  col-md-3">
-                        <h5 class="widget-title wow fadeIn animated text-white">My Account</h5>
-                        <ul class="footer-list wow fadeIn animated">
+                    <!-- Account Links -->
+                    <div class="col-lg-2 col-md-3 col-sm-6 mb-">
+                        <h5 class="widget-title text-white">My Account</h5>
+                        <ul class="footer-list list-unstyled">
                             <li><a href="/login" class="text-white">Sign In</a></li>
                             <li><a href="/cart" class="text-white">View Cart</a></li>
-
                             <li><a href="/orders" class="text-white">Order</a></li>
                         </ul>
                     </div>
-
                 </div>
             </div>
         </section>
-
     </footer>
     <!-- Preloader Start -->
     <div id="preloader-active">

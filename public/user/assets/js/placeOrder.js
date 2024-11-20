@@ -47,12 +47,12 @@ const discountedTotal = totalElement.textContent.replace('₹', ''); // Extract 
       if (response.status === 201) {
         response.json().then((res)=>{
           var options = {
-            "key": "rzp_test_Vz3Fdh1bVQWYj8",
+            "key": "rzp_test_4nBifW9QFThPLx",
             "amount": res.order.amount,
             "currency": res.order.currency,
-            "name": "WatchVogue",
+            "name": "6XO BAGS",
             "description": "Test Transaction",
-            "image": "https://example.com/your_logo",
+            "image": "/Images/6XOLOGO.png",
             "order_id": res.order.id, // Use the actual order ID from your server response
             "handler": async function (response) {
               

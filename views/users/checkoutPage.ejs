@@ -100,24 +100,16 @@
                                                 <td class="product-subtotal" colspan="2">₹<%= total %></td>
                                             </tr>
                                         
-                                            <!-- Determine Delivery Charge -->
-                                            <% 
-                                                let deliveryCharge = 0;
-                                                if (cart.items.length === 1) {
-                                                    deliveryCharge = 80;
-                                                } else if (cart.items.length === 2) {
-                                                    deliveryCharge = 100;
-                                                }
-                                            %>
+                                            <!-- Highlight Free Delivery -->
                                             <tr>
                                                 <th>Shipping</th>
-                                                <td colspan="2"><em>₹<%= deliveryCharge %></em></td>
+                                                <td colspan="2"><em style="color: green; font-weight: bold;">Delivery is Free</em></td>
                                             </tr>
                                         
                                             <tr>
                                                 <th>Total</th>
                                                 <% 
-                                                    let finalTotal = total + deliveryCharge; 
+                                                    let finalTotal = total; // No delivery charge
                                                 %>
                                                 <td colspan="2" class="product-subtotal">
                                                     <span class="font-xl text-brand fw-900">₹<%= finalTotal %></span>
@@ -125,6 +117,7 @@
                                                 </td>
                                             </tr>
                                         </tbody>
+                                        
                                         
                                     </table>
                                 </div>
@@ -211,55 +204,44 @@
    
 
     <footer class="main" style="background-color: #000000;">
-
-        
-
         <section class="section-padding footer-mid">
             <div class="container pt-15 pb-20">
-                <div class="row">
-                    <div class="col-lg-4 col-md-6">
-                        <div class="widget-about font-md mb-md-5 mb-lg-0">
-                            <div class="logo logo-width-1 wow fadeIn animated">
+                <div class="row justify-content-center text-center text-md-start">
+                    <!-- About Section -->
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="widget-about font-md">
+                            <div class="logo logo-width-1">
                                 <h3><a href="/home" class="text-white">6XO<span style="color: #e44d26;"> BAGS</span></a></h3>
                             </div>
-                            <h5 class="mt-20 mb-10 fw-600 text-white wow fadeIn animated">Contact</h5>
-    
-                            <p class="wow fadeIn animated text-white pb-25">
-                                <strong>Phone: </strong>7876356476
+                            <h5 class="mt-20 mb-10 fw-600 text-white">Contact</h5>
+                            <p class="text-white">
+                                <strong class="text-success">Phone:</strong> <a href="tel:+919747333006" class="text-white">+91 9747333006</a>
                             </p>
-             
-                            <!-- <h5 class="mb-10 mt-30 fw-600 text-white wow fadeIn animated">Follow Us</h5>
-                            <div class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0">
-                                <a href="#" ><img  src="/user/assets/imgs/theme/icons/icon-facebook.svg" alt=""></a>
-                            
-                                <a href="#"><img src="/user/assets/imgs/theme/icons/icon-instagram.svg" alt=""></a>
-                  
-                                <a href="#"><img src="/user/assets/imgs/theme/icons/icon-youtube.svg" alt=""></a>
-                            </div> -->
+                            <p class="text-white">
+                                <strong class="text-success">Mail:</strong> <a href="mailto:6xobags@gmail.com" class="text-white">6xobags@gmail.com</a>
+                            </p>
                         </div>
                     </div>
-                    <div class="col-lg-2 col-md-3 text-white">
-                        <h5 class="widget-title wow fadeIn animated text-white">About</h5>
-                        <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0 ">
-                            <li ><a href="#" class="text-white">About Us</a></li>
-                            <li><a href="#" class="text-white">Contact Us</a></li>
-                            <li><a href="#" class="text-white">Support Center</a></li>
+                    <!-- About Links -->
+                    <div class="col-lg-2 col-md-3 col-sm-6 mb-4">
+                        <h5 class="widget-title text-white">About</h5>
+                        <ul class="footer-list list-unstyled">
+                            <li><a href="tel:+919747333006" class="text-white">Contact Us</a></li>
+                            <li><a href="tel:+919747333006" class="text-white">Support Center</a></li>
                         </ul>
                     </div>
-                    <div class="col-lg-2  col-md-3">
-                        <h5 class="widget-title wow fadeIn animated text-white">My Account</h5>
-                        <ul class="footer-list wow fadeIn animated">
+                    <!-- Account Links -->
+                    <div class="col-lg-2 col-md-3 col-sm-6 mb-">
+                        <h5 class="widget-title text-white">My Account</h5>
+                        <ul class="footer-list list-unstyled">
                             <li><a href="/login" class="text-white">Sign In</a></li>
                             <li><a href="/cart" class="text-white">View Cart</a></li>
-  
                             <li><a href="/orders" class="text-white">Order</a></li>
                         </ul>
                     </div>
-  
                 </div>
             </div>
         </section>
-  
     </footer>
       <!-- Preloader Start -->
       <div id="preloader-active">

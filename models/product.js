@@ -44,6 +44,9 @@ const productModel = new mongoose.Schema(
     offerPrice: {
       type: Number,
     },
+    offerPercentage: {
+      type: Number,
+    },
     block: {
       type: Boolean,
       default: false,

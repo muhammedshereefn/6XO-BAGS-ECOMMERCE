@@ -109,6 +109,14 @@ adminRouter.get(
   auth.isLogin,
   adminController.orderPending
 );
+
+adminRouter.get(
+  "/orderShipped/:orderId",
+  auth.isLogin,
+  adminController.orderShipped
+);
+
+
 adminRouter.get(
   "/orderCancel/:orderId",
   auth.isLogin,
@@ -141,6 +149,10 @@ adminRouter.post(
   adminController.updateProductOffer
 );
 
+adminRouter.get("/MainOffer", auth.isLogin, adminController.loadMainOfferPage);
+adminRouter.post("/addMainOffer", auth.isLogin, adminController.addMainOffer);
+
+adminRouter.post('/removeOffer/:id', auth.isLogin, adminController.removeOffer);
 
 //----------------------------CATEGORY OFFERS--------------------------------------------------
 

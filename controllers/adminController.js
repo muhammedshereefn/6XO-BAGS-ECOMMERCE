@@ -8,6 +8,8 @@ const Cart = require("../models/cartModel");
 const Coupon = require("../models/couponModel");
 const Address = require("../models/addressModel");
 const PDFDocument = require("pdfkit");
+const Offer = require('../models/offerModel');
+
 
 const loadLogin = async (req, res) => {
   try {
@@ -597,13 +599,14 @@ const loadAddProduct = async (req, res) => {
 const productadding = async (req, res) => {
   try {
     const prod = await Product.find();
-    console.log(prod);
+    
 
     const newProduct = new Product({
       name: req.body.name,
       description: req.body.description,
       price: req.body.price,
       offerPrice: req.body.realPrice, 
+      offerPercentage: req.body.offerPercentage,
       category: req.body.category,
       brand: req.body.brand,
       quantity: req.body.quantity,
@@ -639,7 +642,7 @@ const loadEditProduct = async (req, res) => {
 
 const editProduct = async (req, res) => {
   try {
-    const { id, name, description, price, category, brand, quantity, coverimage, images } = req.body;
+    const { id, name, description, price,offerPrice,offerPercentage, category, brand, quantity, coverimage, images } = req.body;
 
     // Find the product by ID
     const product = await Product.findById(id);
@@ -648,16 +651,18 @@ const editProduct = async (req, res) => {
     product.name = name;
     product.description = description;
     product.price = price;
+    product.offerPrice = offerPrice;
+    product.offerPercentage = offerPercentage;
     product.category = category;
     product.brand = brand;
     product.quantity = quantity;
    
    
 
-    // Check if the product has an offer field, and update it with the product's price
-    if (product.offerPrice !== undefined) {
-      product.offerPrice = price;
-    }
+    // // Check if the product has an offer field, and update it with the product's price
+    // if (product.offerPrice !== undefined) {
+    //   product.offerPrice = price;
+    // }
 
     // Save the updated product
     await product.save();
@@ -702,6 +707,69 @@ const productList = async (req, res) => {
   }
 };
 
+
+
+const loadMainOfferPage = async (req, res) => {
+  try {
+    // Fetch all offers from the database
+    const offers = await Offer.find(); // You can add filters or sorting if needed
+
+    // Render the main offer form and pass the offers to the view
+    res.render("MainOffer", { offers }); // Pass the offers to the view
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server error"); // Handle errors appropriately
+  }
+};
+
+
+const addMainOffer = async (req, res) => {
+  try {
+    const { title, description, hours, minutes, seconds } = req.body;
+
+    // Create a new offer instance with the timer structured correctly
+    const newOffer = new Offer({
+      title,
+      description,
+      timer: {
+        hours: parseInt(hours),
+        minutes: parseInt(minutes),
+        seconds: parseInt(seconds)
+      }
+    });
+
+    // Save the offer to the database
+    await newOffer.save();
+    res.redirect("/admin/MainOffer"); 
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send("Server error"); 
+  }
+};
+
+
+
+
+const removeOffer = async (req, res) => {
+  try {
+      const offerId = req.params.id; // Get the offer ID from the request parameters
+
+      // Find and delete the offer by its ID
+      const result = await Offer.findByIdAndDelete(offerId);
+
+      if (!result) {
+          return res.status(404).send('Offer not found'); // Handle case where offer does not exist
+      }
+
+      res.redirect('/admin/MainOffer'); // Redirect to dashboard after deletion
+  } catch (error) {
+      console.error(error.message);
+      res.status(500).send('Server error'); // Handle server errors
+  }
+};
+
+
+
 const loadOrderManagementPage = async (req, res) => {
   try {
     const page = +req.query.page || 1; // Get the current page from query parameters
@@ -738,7 +806,7 @@ const orderConform = async (req, res) => {
     const orderId = req.params.orderId;
     const order = await Order.findByIdAndUpdate(
       orderId,
-      { status: "Comform" },
+      { status: "Confirm" },
       { new: true }
     );
 
@@ -749,6 +817,30 @@ const orderConform = async (req, res) => {
     res.redirect("/admin/orderManagement");
   } catch (error) {}
 };
+
+
+const orderShipped = async (req, res) => {
+  try {
+    const orderId = req.params.orderId;
+    const order = await Order.findByIdAndUpdate(
+      orderId,
+      { status: "Shipped" },
+      { new: true }
+    );
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    // Redirect to the order management page
+    res.redirect("/admin/orderManagement");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
 
 const orderPending = async (req, res) => {
   try {
@@ -1365,5 +1457,10 @@ module.exports = {
   validateCoupon,
   loadEditCoupon,
   deleteCoupon,
-  deleteImage
+  deleteImage,
+  loadMainOfferPage,
+  addMainOffer,
+  removeOffer,
+  orderShipped
 };
+

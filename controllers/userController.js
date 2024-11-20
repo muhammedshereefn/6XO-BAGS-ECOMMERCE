@@ -12,6 +12,7 @@ const Razorpay = require("razorpay");
 var easyinvoice = require("easyinvoice");
 const { Readable } = require("stream");
 const bcrypt = require('bcryptjs')
+const Offer = require('../models/offerModel');
 
 
 require('dotenv').config();
@@ -153,12 +154,17 @@ const loaddLogin = async (req, res) => {
     const products = await Product.find({ status: true });
     const cata = await category.find();
 
+    const latestOffer = await Offer.findOne().sort({ createdAt: -1 }).limit(1);
+
+    console.log(latestOffer,"///////?????????????")
+
     res.render("home", {
       message: "",
       userId: req.session.user_id ? req.session.user_id : "",
       products,
       cata,
       userName: " PLease login",
+      latestOffer,
     });
   } catch (error) {
     console.log(error.message);
@@ -212,16 +218,21 @@ const loadHome = async (req, res) => {
 
     const products = await Product.find({ status: true }).limit(8);
     const cata = await category.find();
+
+    const latestOffer = await Offer.findOne().sort({ createdAt: -1 });
+
     res.render("home", {
       userId: req.session.user_id ? req.session.user_id : "",
       products,
       cata,
       userName: user.name,
+      latestOffer
     });
   } catch (error) {
     console.log(error);
   }
 };
+
 
 const userLogout = async (req, res) => {
   try {

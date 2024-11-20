@@ -77,11 +77,21 @@
                                     <div class="card mb-4">
                                         <div class="card-body">
                                             <div class="mb-4">
-                                                <label class="form-label" for="product_price">Price</label>
+                                                <label class="form-label" for="product_price">Offer Price</label>
                                                 <input type="text" value="<%- products.price %>" name="price" placeholder="Type here" class="form-control" id="product_price">
 
                                                 
 
+                                            </div>
+
+                                            <div class="mb-4">
+                                                <label class="form-label" for="product_offerPrice">Real Price</label>
+                                                <input type="text" value="<%- products.offerPrice %>" name="offerPrice" placeholder="Type the offer price here" class="form-control" id="product_offerPrice">
+                                              </div>
+
+                                              <div class="mb-4">
+                                                <label class="form-label" for="offer_percentage">Offer Percentage</label>
+                                                <input type="number" value="<%- products.offerPercentage %>" name="offerPercentage" placeholder="Enter offer percentage" class="form-control" id="offer_percentage">
                                             </div>
 
 
