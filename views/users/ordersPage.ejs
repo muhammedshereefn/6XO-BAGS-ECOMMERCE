@@ -40,12 +40,57 @@
                   <% if (order.status !== "Cancelled" && order.status !== "Delivered") { %>
                       <button type="button" class="btn btn-danger bg-dark" onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
                   <% } %>
+
+                   <!-- Refund Button -->
+          <% if (order.status === "Cancelled") { %>
+            <button type="button" class="btn btn-primary bg-dark" onclick="openRefundModal()">Refund Your Cash</button>
+            <% } %>
               </div>
           </div>
       </div>
   <% }); %>
 </div>
 
+
+
+<!-- Refund Modal -->
+<div class="modal fade" id="refundModal" tabindex="-1" aria-labelledby="refundModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="background-color: #fff; border: 1px solid #444; border-radius: 10px;">
+        <div class="modal-header" style="border-bottom: 1px solid #444;">
+          <h5 class="modal-title" id="refundModalLabel" style="color: #000; font-weight: bold; text-transform: uppercase;">
+            Refund Assistance
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            style="filter: invert(1);"></button>
+        </div>
+        <div class="modal-body" style="color: #333; text-align: center;">
+          <p style="font-size: 16px; color: #000;">For refund assistance, please call the number below:</p>
+          <h4 style="color: #000; font-weight: bold; margin: 20px 0;">+91 9747333006</h4>
+          <p style="font-size: 14px; color: #666;">Our support team is available 24/7 to assist you.</p>
+        </div>
+        <div class="modal-footer" style="border-top: 1px solid #444; justify-content: center;">
+          <a href="tel:+919747333006" class="btn" style="background-color: #333; color: #fff; border: 1px solid #555; border-radius: 5px; padding: 10px 20px; text-transform: uppercase; font-size: 14px; transition: 0.3s;">
+            Call Now
+          </a>
+          <button type="button" class="btn" data-bs-dismiss="modal"
+            style="background-color: #f0f0f0; color: #333; border: 1px solid #ccc; border-radius: 5px; padding: 10px 20px; text-transform: uppercase; font-size: 14px; transition: 0.3s;">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  <script>
+    // Function to open the refund modal
+    function openRefundModal() {
+      const refundModal = new bootstrap.Modal(document.getElementById('refundModal'));
+      refundModal.show();
+    }
+  </script>
 
 
 

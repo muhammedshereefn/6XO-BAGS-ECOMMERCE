@@ -13,6 +13,7 @@ var easyinvoice = require("easyinvoice");
 const { Readable } = require("stream");
 const bcrypt = require('bcryptjs')
 const Offer = require('../models/offerModel');
+const nodemailer = require('nodemailer');
 
 
 require('dotenv').config();
@@ -1005,6 +1006,69 @@ const placeOrderRaz = async (req, res) => {
 
     await Cart.findByIdAndDelete({ _id: cartItems._id });
 
+
+     // Set up Nodemailer transporter
+     const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "order6xobags@gmail.com", // Sender's email
+        pass: "mnea tpif zfjz uovi", // App-specific password
+      },
+    });
+
+
+
+const mailOptions = {
+  from: "order6xobags@gmail.com",
+  to: "6xobags@gmail.com",
+  subject: "New Order Notification",
+  html: `
+    <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
+      <h2 style="color: #4CAF50;">New Order Placed!</h2>
+      <p>Hello Admin,</p>
+      <p>A new order has been successfully placed. Below are the details:</p>
+
+      <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+        <thead>
+          <tr>
+            <th style="border: 1px solid #ddd; padding: 8px; text-align: left; background-color: #f4f4f4;">Details</th>
+            <th style="border: 1px solid #ddd; padding: 8px; text-align: left; background-color: #f4f4f4;">Information</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="border: 1px solid #ddd; padding: 8px;">User ID</td>
+            <td style="border: 1px solid #ddd; padding: 8px;">${req.session.user_id}</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #ddd; padding: 8px;">Address</td>
+            <td style="border: 1px solid #ddd; padding: 8px;">${Address.map(addr => `<div>${addr}</div>`).join('')}</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #ddd; padding: 8px;">Payment Method</td>
+            <td style="border: 1px solid #ddd; padding: 8px;">${paymentMethod}</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #ddd; padding: 8px;">Total Amount</td>
+            <td style="border: 1px solid #ddd; padding: 8px;">${total}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>Please check the admin dashboard for more details.</p>
+
+      <p style="margin-top: 20px;">Thank you,</p>
+      <p><strong>6xobags Team</strong></p>
+    </div>
+  `,
+};
+
+
+    // Send the email
+    await transporter.sendMail(mailOptions);
+
+    console.log("Admin notification sent!");
+
     // Redirect to the orders page after successfully placing the order
     res.status(201).json({ order: order.toObject() }); // Assuming you send a response back to the client
   } catch (error) {
@@ -1059,22 +1123,62 @@ const cancelOrder = async (req, res) => {
       const user = await User.findById(userId);
       
       
-      if (user) {
+      // Send email notification to the admin
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "order6xobags@gmail.com", // Sender's email
+        pass: "mnea tpif zfjz uovi", // App password
+      },
+    });
 
-        console.log(user.wallet,'/////////');
-        console.log(order.grandTotal,"{{{{{{{}}}}}}}}}}}}");
+    const mailOptions = {
+      from: "order6xobags@gmail.com",
+      to: "6xobags@gmail.com",
+      subject: "Order Cancellation Notification",
+      html: `
+        <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
+          <h2 style="color: #FF6347;">Order Cancelled</h2>
+          <p>Hello Admin,</p>
+          <p>The following order has been cancelled:</p>
 
-        if (order.paymentMethod !== "cod") {
-          // Increase the user's wallet by the order's total amount
-          user.wallet += order.grandTotal;
-          await user.save();
-          console.log('SUCCESSFULLY RETURN CASH TO WALLET');
-        }
+          <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+            <thead>
+              <tr>
+                <th style="border: 1px solid #ddd; padding: 8px; text-align: left; background-color: #f4f4f4;">Details</th>
+                <th style="border: 1px solid #ddd; padding: 8px; text-align: left; background-color: #f4f4f4;">Information</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="border: 1px solid #ddd; padding: 8px;">Order ID</td>
+                <td style="border: 1px solid #ddd; padding: 8px;">${order._id}</td>
+              </tr>
+              <tr>
+                <td style="border: 1px solid #ddd; padding: 8px;">User ID</td>
+                <td style="border: 1px solid #ddd; padding: 8px;">${userId}</td>
+              </tr>
+              <tr>
+                <td style="border: 1px solid #ddd; padding: 8px;">Total Amount</td>
+                <td style="border: 1px solid #ddd; padding: 8px;">${order.grandTotal}</td>
+              </tr>
+              <tr>
+                <td style="border: 1px solid #ddd; padding: 8px;">Payment Method</td>
+                <td style="border: 1px solid #ddd; padding: 8px;">${order.paymentMethod}</td>
+              </tr>
+            </tbody>
+          </table>
 
-      
-      }
+          <p>Please take the necessary actions.</p>
 
-      console.log('COD CANCLE');
+          <p style="margin-top: 20px;">Thank you,</p>
+          <p><strong>6xobags Team</strong></p>
+        </div>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log("Admin cancellation notification sent!");
 
     // Respond to the client after the stock update is complete
     res.json({ message: "Order cancelled successfully", order });
