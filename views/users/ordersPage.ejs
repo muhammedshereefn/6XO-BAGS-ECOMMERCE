@@ -33,18 +33,25 @@
                   </ul>
                   <p style="font-size: 13px; padding-bottom: 15px;" class="mt-2">Order Date: <%= order.createdAt.toDateString() %></p>
                   <% if (order.status !== "Delivered" && order.status !== "Cancelled") { %>
-                    <p style="font-size: 13px; padding-bottom: 15px; color: red;" class="mt-2">Delivered within 3 business days</p>
+                    <p style="font-size: 13px; padding-bottom: 15px; color: red;" class="mt-2">Delivered within 4-5 business days</p>
                   <% } %>
-                  <!-- Button to cancel the entire order -->
-                  <a href="/userOrderDetail?id=<%- order._id%>" class="btn  rounded font-sm bg-dark" style="font-size: 12px;">VIEW ORDER DETAILS</a>
-                  <% if (order.status !== "Cancelled" && order.status !== "Delivered") { %>
-                      <button type="button" class="btn btn-danger bg-dark" onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
-                  <% } %>
+                  
+                  <!-- Button to view order details -->
+                  <a href="/userOrderDetail?id=<%- order._id%>" class="btn rounded font-sm bg-dark" style="font-size: 12px;">VIEW ORDER DETAILS</a>
+                  
+               <!-- Cancel, Refund, and Return Buttons -->
+<% if (order.status === "Cancelled") { %>
+  <!-- Show Refund button if status is Cancelled -->
+  <button type="button" class="btn btn-primary bg-dark" onclick="openRefundModal()">Refund Your Cash</button>
+<% } else if (order.status === "Delivered") { %>
+  <!-- Show Return button if status is Delivered -->
+  <button type="button" class="btn btn-warning bg-dark" onclick="openRefundModal()">Return Order</button>
+<% } else if (order.status !== "Refunded" && order.status !== "Delivered" && order.status !== "Shipped" && order.status !== "Confirm") { %>
+  <!-- Show Cancel button if status is not Cancelled, Refunded, Delivered, Shipped, or Confirmed -->
+  <button type="button" class="btn btn-danger bg-dark" onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
+<% } %>
 
-                   <!-- Refund Button -->
-          <% if (order.status === "Cancelled") { %>
-            <button type="button" class="btn btn-primary bg-dark" onclick="openRefundModal()">Refund Your Cash</button>
-            <% } %>
+                  
               </div>
           </div>
       </div>
@@ -65,7 +72,7 @@
             style="filter: invert(1);"></button>
         </div>
         <div class="modal-body" style="color: #333; text-align: center;">
-          <p style="font-size: 16px; color: #000;">For refund assistance, please call the number below:</p>
+          <p style="font-size: 16px; color: #000;">For refund or Return assistance, please call the number below:</p>
           <h4 style="color: #000; font-weight: bold; margin: 20px 0;">+91 9747333006</h4>
           <p style="font-size: 14px; color: #666;">Our support team is available 24/7 to assist you.</p>
         </div>

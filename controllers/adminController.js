@@ -842,6 +842,29 @@ const orderShipped = async (req, res) => {
 
 
 
+const orderRefunded = async (req, res) => {
+  try {
+    const orderId = req.params.orderId;
+    const order = await Order.findByIdAndUpdate(
+      orderId,
+      { status: "Refunded" },
+      { new: true }
+    );
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    // Redirect to the order management page
+    res.redirect("/admin/orderManagement");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+
 const orderPending = async (req, res) => {
   try {
     const orderId = req.params.orderId;
@@ -1461,6 +1484,7 @@ module.exports = {
   loadMainOfferPage,
   addMainOffer,
   removeOffer,
-  orderShipped
+  orderShipped,
+  orderRefunded
 };
 

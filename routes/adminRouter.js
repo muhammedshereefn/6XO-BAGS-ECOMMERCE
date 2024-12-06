@@ -116,6 +116,12 @@ adminRouter.get(
   adminController.orderShipped
 );
 
+adminRouter.get(
+  "/orderRefunded/:orderId",
+  auth.isLogin,
+  adminController.orderRefunded
+);
+
 
 adminRouter.get(
   "/orderCancel/:orderId",

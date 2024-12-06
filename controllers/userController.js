@@ -150,6 +150,9 @@ const resendOtp = async (req, res) => {
 };
 
 
+
+
+
 const loaddLogin = async (req, res) => {
   try {
     const products = await Product.find({ status: true });
@@ -345,6 +348,55 @@ const loadAddAddress = async (req, res) => {
     console.log(error);
   }
 };
+
+
+
+
+const loadTermsandConditions = async (req, res) => {
+  try {
+    res.render("Teams&condition");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+const loadPrivacyandPolicies = async (req, res) => {
+  try {
+    res.render("privacy&policy");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+const loadContactUs = async (req, res) => {
+  try {
+    
+    const userId = req.session.user_id;
+  
+    res.render("contactus", {
+      
+     
+      userId: req.session.user_id ? req.session.user_id : "",
+      
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+
+const loadRefundPolicy = async (req, res) => {
+  try {
+    res.render("refundPolicy");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
 
 const addressAdding = async (req, res) => {
   try {
@@ -1781,5 +1833,9 @@ module.exports = {
   addWallet,
   updateWallet,
   getreferal,
-  cartQuantityUpdate 
+  cartQuantityUpdate ,
+  loadTermsandConditions,
+  loadPrivacyandPolicies,
+  loadContactUs,
+  loadRefundPolicy
 };
