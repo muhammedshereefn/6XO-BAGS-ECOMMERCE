@@ -34,7 +34,7 @@ userRouter.post("/resendOtp", userController.resendOtp);
 userRouter.get("/terms&conditions", userController.loadTermsandConditions);
 userRouter.get("/privacy&policy", userController.loadPrivacyandPolicies);
 userRouter.get("/contact-us", userController.loadContactUs);
-userRouter.get("/refundPolicy",auth.isLogin, userController.loadRefundPolicy);
+userRouter.get("/refundPolicy", userController.loadRefundPolicy);
 
 
 // login user
