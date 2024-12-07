@@ -47,7 +47,7 @@ const discountedTotal = totalElement.textContent.replace('₹', ''); // Extract 
       if (response.status === 201) {
         response.json().then((res)=>{
           var options = {
-            "key": "rzp_test_4nBifW9QFThPLx",
+            "key": "rzp_live_Yns1JlyDs6fTuK",
             "amount": res.order.amount,
             "currency": res.order.currency,
             "name": "6XO BAGS",
