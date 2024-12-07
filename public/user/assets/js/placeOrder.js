@@ -78,6 +78,10 @@ const discountedTotal = totalElement.textContent.replace('₹', ''); // Extract 
        
 
        
+      }else if (response.status === 400) {
+        // Show error message for invalid stock
+        const res = await response.json();
+        Swal.fire('Error', res.message, 'error');
       }
     }else if (paymentMethod === 'wallet') {
       const response = await fetch('/placeOrder', {

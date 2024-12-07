@@ -730,6 +730,20 @@ const loadCheckout = async (req, res) => {
     );
     const activeCoupons = await Coupon.find({ isActive: true });
 
+
+    for (let product of cart.items) {
+      const productDetails = product.product;  // Assuming `product.product` gives you the product details
+      if (product.quantity > productDetails.quantity) {
+        console.log("jjjsjsjjsjsjs++++++++++++++++_-----------");
+        
+        // If quantity exceeds available stock, redirect back to the cart or reload the page
+        return res.status(400).json({ 
+          message: `Quantity for ${productDetails.name} exceeds available stock`,
+        });
+      }
+    }
+    
+
     // Calculate orderTotal from the cart
     let orderTotal = 0;
     cart.items.forEach((product) => {
@@ -935,6 +949,19 @@ console.log(selectedAddressId);
       await Cart.findByIdAndDelete({ _id: cartItems._id });
       return res.status(200).json({ message: "Order placed successfully." });
     } else if (paymentMethod === "razorpay") {
+
+      const cartItems = await Cart.findOne({ user: req.session.user_id });
+      for (let element of cartItems.items) {
+        const product = await Product.findOne({ _id: element.product });
+        
+        // Check if selected quantity is greater than available stock
+        if (element.quantity > product.quantity) {
+          console.log("Out Stock...............");
+          
+          return res.status(400).json({ message: "Invalid stock, quantity exceeds available stock" });
+        }
+      }
+
       console.log("razorpay");
       const options = {
         amount: total * 100,
