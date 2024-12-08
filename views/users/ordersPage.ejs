@@ -152,16 +152,6 @@
   };
 </script>
 
-
-
-
-
-
-
-
-
-
-
   <!-- Preloader Start -->
   <div id="preloader-active">
     <div class="preloader d-flex align-items-center justify-content-center">
@@ -207,50 +197,66 @@
 
 <script>
   function cancelOrder(orderId) {
-    // Display a confirmation popup using SweetAlert
-    Swal.fire({
-        title: 'Cancel Order',
-        text: 'Are you sure you want to cancel this order?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Yes, cancel it!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Make a request to the server to cancel the order
-            fetch(`/cancelOrder/${orderId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data.message);
-
-                // Update the UI to reflect the cancelled status
-                const status = document.getElementById("statusChange");
-                const button = document.getElementById("btnChange");
-                if (status) {
-                    status.innerHTML = "Cancelled";
-                }
-                if (button) {
-                    button.style.display = "none";
-                }
-
-                // Optionally, reload the page to reflect changes
-                location.reload();
-            })
-            .catch(error => {
-                console.error('Error cancelling order:', error);
-                // Handle errors as needed
-            });
-        }
-    });
-}
-
-</script>
+      // Display a confirmation popup using SweetAlert
+      Swal.fire({
+          title: 'Cancel Order',
+          text: 'Are you sure you want to cancel this order?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Yes, cancel it!',
+      }).then((result) => {
+          if (result.isConfirmed) {
+              // Show a loading alert
+              Swal.fire({
+                  title: 'Cancelling Order...',
+                  text: 'Please wait. Stay on this page.',
+                  icon: 'info',
+                  allowOutsideClick: false,
+                  showConfirmButton: false,
+                  timer: 3000, // Loading for 1 second
+                  willClose: () => {
+                      // After 1 second, proceed with the request
+                      fetch(`/cancelOrder/${orderId}`, {
+                          method: 'POST',
+                          headers: {
+                              'Content-Type': 'application/json',
+                          },
+                      })
+                          .then(response => response.json())
+                          .then(data => {
+                              console.log(data.message);
+  
+                              // Update the UI to reflect the cancelled status
+                              const status = document.getElementById("statusChange");
+                              const button = document.getElementById("btnChange");
+                              if (status) {
+                                  status.innerHTML = "Cancelled";
+                              }
+                              if (button) {
+                                  button.style.display = "none";
+                              }
+  
+                              // Optionally, reload the page to reflect changes
+                              location.reload();
+                          })
+                          .catch(error => {
+                              console.error('Error cancelling order:', error);
+                              // Show error alert if something goes wrong
+                              Swal.fire({
+                                  title: 'Error!',
+                                  text: 'Failed to cancel the order. Please try again.',
+                                  icon: 'error',
+                              });
+                          });
+                  },
+              });
+          }
+      });
+  }
+  </script>
+  
 
 </body>
 </html>

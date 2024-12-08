@@ -3,21 +3,18 @@
             <div class="content-header">
                 <div>
                     <h2 class="content-title card-title">Order detail</h2>
-                    <p>Details for Order ID: 3453012</p>
+                    
                 </div>
             </div>
             <div class="card">
                 <header class="card-header">
                     <div class="row align-items-center">
                         <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
-                            <span>
-                                <i class="material-icons md-calendar_today"></i> <b>Wed, Aug 13, 2022, 4:34PM</b>
-                            </span> <br>
-                            <small class="text-muted">Order ID: 3453012</small>
+                           
                         </div>
                         <div class="col-lg-6 col-md-6 ms-auto text-md-end">
                             
-                            <a class="btn btn-primary" href="#">Save</a>
+                            
                             <a class="btn btn-secondary print ms-2" href="#"><i class="icon material-icons md-print"></i></a>
                         </div>
                     </div>
@@ -35,7 +32,7 @@
                                         <%= order.user.name%> <br>  <%= order.user.email%>  <br>   <%= order.user.mobile%> 
 
                                     </p>
-                                    <a href="#">View profile</a>
+                                    
                                 </div>
                             </article>
                         </div> <!-- col// --> 
@@ -47,9 +44,9 @@
                                 <div class="text">
                                     <h6 class="mb-1">Order info</h6>
                                     <p class="mb-1">
-                                        Shipping: Fargo express <br> Pay method: <%= order.paymentMethod %><br> Status: <%=order.status%>
+                                       Order Date : <%= order.createdAt.toDateString() %> <br> Pay method: <%= order.paymentMethod %><br> Status: <%=order.status%>
                                     </p>
-                                    <a href="#">Download info</a>
+                                   
                                 </div>
                             </article>
                         </div> <!-- col// -->
@@ -66,7 +63,7 @@
                                         <%= order.address[0].city %>, <%= order.address[0].district %>, <%= order.address[0].state %>, <%= order.address[0].country %><br>
                                         Pincode: <%= order.address[0].pincode %>
                                     </p>
-                                    <a href="/profile">View profile</a>
+                                   
                                 </div>
                             </article>
                         </div> <!-- col// -->
@@ -156,7 +153,7 @@
                                 </span>
                             </td>
                         </div>
-                            <a class="btn btn-primary" href="page-orders-tracking.html">View Order Tracking</a>
+                            
                            
                         </div> <!-- col// -->
                         <div class="col-lg-1"></div>
