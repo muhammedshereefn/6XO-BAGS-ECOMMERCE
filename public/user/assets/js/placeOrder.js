@@ -53,7 +53,7 @@ const discountedTotal = totalElement.textContent.replace('₹', ''); // Extract 
             "name": "6XO BAGS",
             "description": "Test Transaction",
             "image": "/Images/6XOLOGO.png",
-            "order_id": res.order.id, // Use the actual order ID from your server response
+            "order_id": res.order.id, 
             "handler": async function (response) {
               
   

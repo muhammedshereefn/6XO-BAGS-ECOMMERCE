@@ -75,6 +75,9 @@
           <p style="font-size: 16px; color: #000;">For refund or Return assistance, please call the number below:</p>
           <h4 style="color: #000; font-weight: bold; margin: 20px 0;">+91 9747333006</h4>
           <p style="font-size: 14px; color: #666;">Our support team is available 24/7 to assist you.</p>
+          <p style="font-size: 14px; color: #f10707; font-weight: bold; margin-top: 20px;">
+            After confirmation, it will take 5-7 days to refund the amount to your bank account.
+        </p>
         </div>
         <div class="modal-footer" style="border-top: 1px solid #444; justify-content: center;">
           <a href="tel:+919747333006" class="btn" style="background-color: #333; color: #fff; border: 1px solid #555; border-radius: 5px; padding: 10px 20px; text-transform: uppercase; font-size: 14px; transition: 0.3s;">
@@ -200,7 +203,7 @@
       // Display a confirmation popup using SweetAlert
       Swal.fire({
           title: 'Cancel Order',
-          text: 'Are you sure you want to cancel this order?',
+          html: 'Are you sure you want to cancel this order? <br><span style="color: red;">Note: After cancelling the order, please request a refund for your amount. After confirmation, it will take 5-7 business days.</span>',
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#d33',

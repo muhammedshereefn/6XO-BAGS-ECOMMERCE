@@ -914,8 +914,9 @@ const razorpay = new Razorpay({
 
 const placeOrder = async (req, res) => {
   const { selectedAddressId, paymentMethod, total, couponCode } = req.body;
-  console.log("Payment Method:", paymentMethod);
-console.log(selectedAddressId);
+  
+  console.log(razorpay,":::::::::::::::::::::::");
+
   try {
     if (paymentMethod === "cod") {
       // Handle Cash On Delivery (cod) logic
