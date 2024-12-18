@@ -596,34 +596,42 @@ const loadAddProduct = async (req, res) => {
   }
 };
 
+
 const productadding = async (req, res) => {
   try {
-    const prod = await Product.find();
+    const files = req.files;
+
+    console.log(files,"|||{{{}}}}}}||||");
     
 
+    // Extract the Cloudinary URLs for coverimage and images
+    const coverImageUrl = files.coverimage[0].path; // Path contains the Cloudinary URL
+    const imagesUrls = files.images.map(file => file.path);
+
+    console.log(coverImageUrl);
+    console.log(imagesUrls);
+    
+
+    // Create a new product
     const newProduct = new Product({
       name: req.body.name,
       description: req.body.description,
       price: req.body.price,
-      offerPrice: req.body.realPrice, 
+      offerPrice: req.body.realPrice,
       offerPercentage: req.body.offerPercentage,
       category: req.body.category,
       brand: req.body.brand,
       quantity: req.body.quantity,
-      coverimage: "/products/" + req.session.images[0],
-      images: [
-        "/products/" + req.session.images[1],
-        "/products/" + req.session.images[2],
-        "/products/" + req.session.images[3],
-      ],
+      coverimage: coverImageUrl, // Cloudinary URL for cover image
+      images: imagesUrls, // Array of Cloudinary URLs for additional images
     });
 
     await newProduct.save();
-    req.session.images = null;
 
     res.redirect("/admin/productList?change=true");
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    res.status(500).send("Error adding product");
   }
 };
 
