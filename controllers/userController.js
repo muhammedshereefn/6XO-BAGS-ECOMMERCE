@@ -159,8 +159,7 @@ const loaddLogin = async (req, res) => {
     const cata = await category.find();
 
     const latestOffer = await Offer.findOne().sort({ createdAt: -1 }).limit(1);
-
-    console.log(latestOffer,"///////?????????????")
+   
 
     res.render("home", {
       message: "",
@@ -220,7 +219,7 @@ const loadHome = async (req, res) => {
       user = await User.findOne({ _id: userId });
     }
 
-    const products = await Product.find({ status: true }).limit(8);
+    const products = await Product.find({ status: true }).limit(28);
     const cata = await category.find();
 
     const latestOffer = await Offer.findOne().sort({ createdAt: -1 });
