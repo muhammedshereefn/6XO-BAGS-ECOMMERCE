@@ -45,6 +45,8 @@ const discountedTotal = totalElement.textContent.replace('₹', ''); // Extract 
       });
 
       if (response.status === 201) {
+        console.log("FIRST ORDER RESPONSE OK ANN",response);
+        
         response.json().then((res)=>{
           var options = {
             "key": "rzp_live_Yns1JlyDs6fTuK",
@@ -66,6 +68,7 @@ const discountedTotal = totalElement.textContent.replace('₹', ''); // Extract 
                 body: JSON.stringify(payload),
               });
   
+              console.log("Front end ok oredered this is payload",payload);
               
               window.location.href = '/orders';
             }

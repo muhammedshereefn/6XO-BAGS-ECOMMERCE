@@ -914,7 +914,7 @@ const razorpay = new Razorpay({
 const placeOrder = async (req, res) => {
   const { selectedAddressId, paymentMethod, total, couponCode } = req.body;
   
-  console.log(razorpay,":::::::::::::::::::::::");
+  console.log("PKAXE ORDERIL ETHIIIIIIIII");
 
   try {
     if (paymentMethod === "cod") {
@@ -950,19 +950,20 @@ const placeOrder = async (req, res) => {
       return res.status(200).json({ message: "Order placed successfully." });
     } else if (paymentMethod === "razorpay") {
 
+      console.log("PAYMENT METHOD CHOOSEN RAZORPAY");
+      
+
       const cartItems = await Cart.findOne({ user: req.session.user_id });
       for (let element of cartItems.items) {
         const product = await Product.findOne({ _id: element.product });
         
         // Check if selected quantity is greater than available stock
         if (element.quantity > product.quantity) {
-          console.log("Out Stock...............");
+          
           
           return res.status(400).json({ message: "Invalid stock, quantity exceeds available stock" });
         }
       }
-
-      console.log("razorpay");
       const options = {
         amount: total * 100,
         currency: "INR",
@@ -971,6 +972,9 @@ const placeOrder = async (req, res) => {
       };
 
       razorpay.orders.create(options, (err, order) => {
+
+        console.log("ORDER CREATED MAN");
+        
         if (err) {
           console.log("Error creating razorpay order:", order);
         }
@@ -979,8 +983,7 @@ const placeOrder = async (req, res) => {
         return res.status(201).json({ order });
       });
     } else if (paymentMethod === "wallet") {
-      console.log("Processing wallet payment////////////////////");
-
+      
       let products = [];
 
       const userId = req.session.user_id;
@@ -1069,9 +1072,9 @@ const placeOrderRaz = async (req, res) => {
     }
 
     const address = await User.findOne({_id:req.session.user_id});
-      console.log(address);
+      
       let Address = address.addresses;
-      console.log(Address);
+      
 
     const order = new Order({
       user: req.session.user_id,
@@ -1080,6 +1083,8 @@ const placeOrderRaz = async (req, res) => {
       products,
       grandTotal: total,
     });
+
+    console.log("ORDER SUCCESFULLY CREATED",order)
 
     await order.save();
 
