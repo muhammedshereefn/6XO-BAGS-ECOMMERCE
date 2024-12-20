@@ -45,12 +45,12 @@ const insertUser = async (req, res) => {
 
       const referralCode = generateRandomReferralCode();
       
-      const hashed = await bcrypt.hash(req.body.password,10)
+      // const hashed = await bcrypt.hash(req.body.password,10)
 
       const user = new User({
         name: req.body.name,
         email: req.body.email,
-        password: hashed,
+        // password: hashed,
         mobile: req.body.mobile,
         referalCode: referralCode,
       });
