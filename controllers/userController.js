@@ -1071,7 +1071,13 @@ const placeOrderRaz = async (req, res) => {
       // Step 1: Verify Razorpay Signature
       if (!verifySignature(razorpayPaymentId, razorpayOrderId, razorpaySignature)) {
         return res.status(400).json({ error: 'Invalid payment signature' });
+      }else{
+        console.log("Signature is successFullllllll");
+        
       }
+
+      
+      
 
     let products = [];
     const cartItems = await Cart.findOne({ user: req.session.user_id });

@@ -34,7 +34,6 @@ const discountedTotal = totalElement.textContent.replace('₹', ''); // Extract 
       }
 
     } else if (paymentMethod === 'razorpay') {
-      
 
       const response = await fetch('/placeOrder', {
         method: 'POST',
@@ -58,13 +57,16 @@ const discountedTotal = totalElement.textContent.replace('₹', ''); // Extract 
             "order_id": res.order.id, 
             "handler": async function (response) {
 
+              alert(JSON.stringify(response))
+
               const updatedPayload = {
                 ...payload,
                 razorpayPaymentId: response.razorpay_payment_id,
                 razorpayOrderId: response.razorpay_order_id,
                 razorpaySignature: response.razorpay_signature,
               }
-  
+
+              alert(JSON.stringify(updatedPayload))
               // Fetch to complete the order on the server
               await fetch('/placeOrderRaz', {
                 method: 'POST',
@@ -73,19 +75,15 @@ const discountedTotal = totalElement.textContent.replace('₹', ''); // Extract 
                 },
                 body: JSON.stringify(updatedPayload),
               });
-  
-              console.log("Front end ok oredered this is payload",payload);
-              
+              console.log("Front end ok oredered this is payload",updatedPayload);
+              alert("Worked /placeOrderRaz")
               window.location.href = '/orders';
             }
           };
-        
           var rzp1 = new Razorpay(options);
           rzp1.open();
         })
-
-       
-
+        
        
       }else if (response.status === 400) {
         // Show error message for invalid stock
