@@ -57,7 +57,13 @@ const discountedTotal = totalElement.textContent.replace('₹', ''); // Extract 
             "image": "/Images/6XOLOGO.png",
             "order_id": res.order.id, 
             "handler": async function (response) {
-              
+
+              const updatedPayload = {
+                ...payload,
+                razorpayPaymentId: response.razorpay_payment_id,
+                razorpayOrderId: response.razorpay_order_id,
+                razorpaySignature: response.razorpay_signature,
+              }
   
               // Fetch to complete the order on the server
               await fetch('/placeOrderRaz', {
@@ -65,7 +71,7 @@ const discountedTotal = totalElement.textContent.replace('₹', ''); // Extract 
                 headers: {
                   'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(payload),
+                body: JSON.stringify(updatedPayload),
               });
   
               console.log("Front end ok oredered this is payload",payload);

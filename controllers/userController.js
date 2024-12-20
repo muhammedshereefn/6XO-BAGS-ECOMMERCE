@@ -83,8 +83,8 @@ const insertUser = async (req, res) => {
       req.session.otp = sendOtp(user.email);
       req.session.userData = user;
 
-      res.redirect("/otp");
-      console.log(req.session.otp);
+      res.redirect("/login");
+      
     }
   } catch (error) {
     console.log(error.message);
@@ -732,9 +732,7 @@ const loadCheckout = async (req, res) => {
 
     for (let product of cart.items) {
       const productDetails = product.product;  // Assuming `product.product` gives you the product details
-      if (product.quantity > productDetails.quantity) {
-        console.log("jjjsjsjjsjsjs++++++++++++++++_-----------");
-        
+      if (product.quantity > productDetails.quantity) { 
         // If quantity exceeds available stock, redirect back to the cart or reload the page
         return res.status(400).json({ 
           message: `Quantity for ${productDetails.name} exceeds available stock`,
@@ -904,7 +902,7 @@ const checkoutaddressAdding = async (req, res) => {
 };
 
 
-
+const crypto = require('crypto');
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET,
@@ -1054,9 +1052,26 @@ const placeOrder = async (req, res) => {
   }
 };
 
+
+const verifySignature = (razorpayPaymentId, razorpayOrderId, razorpaySignature) => {
+  const secret = process.env.RAZORPAY_KEY_SECRET;
+  const generatedSignature = crypto
+    .createHmac('sha256', secret)
+    .update(`${razorpayOrderId}|${razorpayPaymentId}`)
+    .digest('hex');
+  return generatedSignature === razorpaySignature;
+};
+
+
 const placeOrderRaz = async (req, res) => {
   try {
-    const { selectedAddressId, paymentMethod, total } = req.body;
+    const { selectedAddressId, paymentMethod, total, razorpayPaymentId, razorpayOrderId, razorpaySignature  } = req.body;
+
+
+      // Step 1: Verify Razorpay Signature
+      if (!verifySignature(razorpayPaymentId, razorpayOrderId, razorpaySignature)) {
+        return res.status(400).json({ error: 'Invalid payment signature' });
+      }
 
     let products = [];
     const cartItems = await Cart.findOne({ user: req.session.user_id });
@@ -1380,13 +1395,19 @@ const addNewPassword = async (req, res) => {
 
 const loadhomeProduct = async (req, res) => {
   try {
-    let user = { name: "For better experience, please login" };
+    // let user = { name: "" };
+    // if (req.session) {
+    //   const userId = req.session.user_id;
+    //   user = await User.findOne({ _id: userId });
+    // }
+
+    let user = { name: "For better experience please login" };
     if (req.session) {
       const userId = req.session.user_id;
       user = await User.findOne({ _id: userId });
     }
 
-    const productsPerPage = 12; // Number of products per page
+    const productsPerPage = 20; // Number of products per page
     const currentPage = req.query.page || 1;
 
     // Retrieve category filter from the request query
@@ -1421,7 +1442,7 @@ const loadhomeProduct = async (req, res) => {
       userId: req.session.user_id ? req.session.user_id : "",
       products,
       cata,
-      userName: user.name,
+      userName: user ? user.name : "",
       currentPage,
       totalPages,
       categoryFilter,

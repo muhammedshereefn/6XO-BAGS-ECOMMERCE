@@ -26,9 +26,7 @@ userRouter.set("views", "./views/users");
 // registration user
 userRouter.get("/register", auth.isLogout, userController.loadRegister);
 userRouter.post("/register", userController.insertUser);
-userRouter.get("/otp", userController.otpPage);
-userRouter.post("/verifyOtp", userController.verifyotp);
-userRouter.post("/resendOtp", userController.resendOtp);
+
 
 
 userRouter.get("/terms&conditions", userController.loadTermsandConditions);
@@ -147,7 +145,7 @@ userRouter.post("/placeOrderRaz", auth.isLogin, userController.placeOrderRaz);
 
 //-----------------------------SHOP PAGE AND SEARCH PRODUCTS----------------------------------
 
-userRouter.get("/homeProduct", auth.isLogin, userController.loadhomeProduct);
+userRouter.get("/homeProduct", userController.loadhomeProduct);
 userRouter.get("/searchProduct", userController.searchProduct);
 
 
