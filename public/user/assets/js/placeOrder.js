@@ -56,17 +56,12 @@ const discountedTotal = totalElement.textContent.replace('₹', ''); // Extract 
             "image": "/Images/6XOLOGO.png",
             "order_id": res.order.id, 
             "handler": async function (response) {
-
-              alert(JSON.stringify(response))
-
               const updatedPayload = {
                 ...payload,
                 razorpayPaymentId: response.razorpay_payment_id,
                 razorpayOrderId: response.razorpay_order_id,
                 razorpaySignature: response.razorpay_signature,
               }
-
-              alert(JSON.stringify(updatedPayload))
               // Fetch to complete the order on the server
               await fetch('/placeOrderRaz', {
                 method: 'POST',
@@ -74,10 +69,22 @@ const discountedTotal = totalElement.textContent.replace('₹', ''); // Extract 
                   'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(updatedPayload),
-              });
-              console.log("Front end ok oredered this is payload",updatedPayload);
-              alert("Worked /placeOrderRaz")
-              window.location.href = '/orders';
+              })
+                .then((response) => {
+                  if (response.ok) {
+                    console.log("Front end ok ordered, this is payload", updatedPayload);
+                    // alert("Worked /placeOrderRaz");
+                    window.location.href = '/orders';
+                  } else {
+                    // Handle unsuccessful response (e.g., show an error message)
+                    alert('Failed to place order. Please try again.');
+                  }
+                })
+                .catch((error) => {
+                  // Handle any errors that occur during the fetch (e.g., network errors)
+                  console.error('Error placing order:', error);
+                  alert('There was an error placing your order. Please try again.');
+                });              
             }
           };
           var rzp1 = new Razorpay(options);
