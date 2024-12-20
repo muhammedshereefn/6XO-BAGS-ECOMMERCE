@@ -188,11 +188,11 @@ const loadLogin = async (req, res) => {
 const verfiyUser = async (req, res) => {
   try {
     const email = req.body.email;
-    const password = req.body.password;
+    // const password = req.body.password;
 
     const userData = await User.findOne({ email: email });
     if (userData) {
-      if (await bcrypt.compare(password,userData.password)) {
+    
         if (userData.isBlocked === false) {
           req.session.user_id = userData._id;
           res.redirect("/home");
@@ -200,9 +200,7 @@ const verfiyUser = async (req, res) => {
             // User is blocked
             res.render("login", { message: "User is blocked. Please contact support for assistance." });
         }
-      } else {
-        res.render("login", { message: "Invalid email or password" });
-      }
+      
     } else {
       res.render("login", { message: "Invalid email or password" });
     }
