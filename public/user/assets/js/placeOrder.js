@@ -73,7 +73,7 @@ const discountedTotal = totalElement.textContent.replace('₹', ''); // Extract 
                 .then((response) => {
                   if (response.ok) {
                     console.log("Front end ok ordered, this is payload", updatedPayload);
-                    // alert("Worked /placeOrderRaz");
+                    alert("Your Order is Created . Press OK and Wait...");
                     window.location.href = '/orders';
                   } else {
                     // Handle unsuccessful response (e.g., show an error message)
