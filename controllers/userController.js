@@ -1438,7 +1438,7 @@ const loadhomeProduct = async (req, res) => {
 
     // Retrieve products based on category filter, skipping, and limiting
     const products = await Product.find({ status: true, ...categoryQuery })
-      .sort({ offerPrice: 1 })
+      .sort({ offerPercentage: -1 })
       .skip(skip)
       .limit(productsPerPage);
 
