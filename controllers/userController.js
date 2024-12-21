@@ -155,7 +155,7 @@ const resendOtp = async (req, res) => {
 
 const loaddLogin = async (req, res) => {
   try {
-    const products = await Product.find({ status: true });
+    const products = await Product.find({ status: true }).sort({ price: 1 });
     const cata = await category.find();
 
     const latestOffer = await Offer.findOne().sort({ createdAt: -1 }).limit(1);
