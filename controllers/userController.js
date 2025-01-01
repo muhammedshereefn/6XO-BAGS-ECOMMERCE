@@ -150,9 +150,6 @@ const resendOtp = async (req, res) => {
 };
 
 
-
-
-
 const loaddLogin = async (req, res) => {
   try {
     const products = await Product.find({ status: true }).sort({ price: 1 });
@@ -211,6 +208,7 @@ const verfiyUser = async (req, res) => {
 
 const loadHome = async (req, res) => {
   try {
+    console.log("Load home")
     let user = { name: "For better experience please login" };
     if (req.session) {
       const userId = req.session.user_id;
