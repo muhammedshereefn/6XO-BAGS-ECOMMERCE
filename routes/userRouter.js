@@ -139,8 +139,10 @@ userRouter.get(
 
 //-----------------------------PLACE ORDER--------------------------------------------------
 
+userRouter.post('/createProductOrder', auth.isLogin, userController.createProductOrder);
 userRouter.post("/placeOrder", auth.isLogin, userController.placeOrder);
 userRouter.post("/placeOrderRaz", auth.isLogin, userController.placeOrderRaz);
+userRouter.post('/deleteOrder',auth.isLogin, userController.deleteOrder)
 
 
 //-----------------------------SHOP PAGE AND SEARCH PRODUCTS----------------------------------

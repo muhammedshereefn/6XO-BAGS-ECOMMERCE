@@ -1,13 +1,12 @@
+
+
+
 document.getElementById('placeOrderButton').addEventListener('click', async () => {
   const selectedAddressId = document.querySelector('input[name="selectedAddressId"]:checked').value;
   const paymentMethod = document.querySelector('input[name="payment_option"]:checked').value;
   const total = document.getElementById('orderTotalInput').value;
   const totalElement = document.querySelector('.font-xl.text-brand.fw-900');
 const discountedTotal = totalElement.textContent.replace('₹', ''); // Extract value without currency symbol
-
-
-
-
 
   const payload = {
     selectedAddressId,
@@ -16,123 +15,105 @@ const discountedTotal = totalElement.textContent.replace('₹', ''); // Extract 
   };
 
   try {
-    if (paymentMethod === 'cod') {
-      const response = await fetch('/placeOrder', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        }, 
-        body: JSON.stringify(payload),
+
+    const orderResponse = await fetch('/createProductOrder',{
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+
+    if (orderResponse.status === 400) {
+      const errorResponse = await orderResponse.json();
+      Swal.fire({
+        icon: 'error',
+        title: 'Out of Stock',
+        text: errorResponse.error,
+        confirmButtonText: 'Go to Cart',
+        confirmButtonColor: '#3085d6',
+        preConfirm: () => {
+          window.location.href = '/cart';  // Redirect to home page
+        },
       });
+      return;
+    }
 
-      if (response.ok) {
-        // alert('COD successful');
-        console.log('Order placed successfully!');
-       
-      } else {
-        console.error('Failed to place order');
-      }
+    if (orderResponse.status === 201) {
+      const { productOrderId } = await orderResponse.json();
+   
 
-    } else if (paymentMethod === 'razorpay') {
+    if (paymentMethod === 'razorpay') {
 
       const response = await fetch('/placeOrder', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ productOrderId, total: discountedTotal }),
       });
 
       if (response.status === 201) {
-        console.log("FIRST ORDER RESPONSE OK ANN",response);
         
-        response.json().then((res)=>{
-          var options = {
-            "key": "rzp_live_Yns1JlyDs6fTuK",
-            "amount": res.order.amount,
-            "currency": res.order.currency,
-            "name": "6XO BAGS",
-            "description": "Test Transaction",
-            "image": "/Images/6XOLOGO.png",
-            "order_id": res.order.id, 
-            "handler": async function (response) {
-              const updatedPayload = {
-                ...payload,
-                razorpayPaymentId: response.razorpay_payment_id,
-                razorpayOrderId: response.razorpay_order_id,
-                razorpaySignature: response.razorpay_signature,
-              }
-              // Fetch to complete the order on the server
-              await fetch('/placeOrderRaz', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updatedPayload),
-              })
-                .then((response) => {
-                  if (response.ok) {
-                    console.log("Front end ok ordered, this is payload", updatedPayload);
-                    alert("Your Order is Created . Press OK and Wait...");
-                    window.location.href = '/orders';
-                  } else {
-                    // Handle unsuccessful response (e.g., show an error message)
-                    alert('Failed to place order. Please try again.');
-                  }
-                })
-                .catch((error) => {
-                  // Handle any errors that occur during the fetch (e.g., network errors)
-                  console.error('Error placing order:', error);
-                  alert('There was an error placing your order. Please try again.');
-                });              
+        const { order } = await response.json();
+        
+        const options = {
+          key : "rzp_live_Yns1JlyDs6fTuK",
+          amount : order.amount,
+          currency: order.currency,
+          name: '6XO BAGS',
+          description: 'Test Transaction',
+          image: '/Images/6XOLOGO.png',
+          order_id: order.id,
+
+          handler: async (response) => {
+            const updatedPayload = {
+              ...payload,
+              razorpayPaymentId: response.razorpay_payment_id,
+              razorpayOrderId: response.razorpay_order_id,
+              razorpaySignature: response.razorpay_signature,
+              productOrderId
+            };
+
+            document.getElementById('loadingSpinner').style.display = 'flex';
+
+            const placeOrderResponse = await fetch('/placeOrderRaz',{
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(updatedPayload),
+            });
+            if (placeOrderResponse.status === 201) {
+              // alert('Order placed successfully!');
+              window.location.href = '/orders';
+            } else {
+              alert('Order failed. Payment refunded.');
+              document.getElementById('loadingSpinner').style.display = 'none'; 
             }
-          };
-          var rzp1 = new Razorpay(options);
-          rzp1.open();
-        })
+          },
+
+          modal : {
+            ondismiss: async () => {
+              // Send request to delete the order if Razorpay modal is closed
+              const orderId = productOrderId;
+              console.log(orderId);
+              
+              await fetch('/deleteOrder', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                
+                body: JSON.stringify({ orderId })
+              });
+              console.log('Order deleted due to Razorpay modal close');
+              
+            }
+          }
+        }
+
+        const rzp = new Razorpay(options);
+        rzp.open();
         
        
-      }else if (response.status === 400) {
-        // Show error message for invalid stock
-        const res = await response.json();
-        Swal.fire('Error', res.message, 'error');
-      }
-    }else if (paymentMethod === 'wallet') {
-      const response = await fetch('/placeOrder', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (response.status === 200) {
-        // Wallet payment successful
-        const confirmResult = await Swal.fire({
-          title: 'Order Placed Successfully',
-          text: 'Do you want to view your orders?',
-          icon: 'success',
-          showCancelButton: true,
-          confirmButtonText: 'Yes, view orders',
-          cancelButtonText: 'No, thanks'
-      });
-
-      if (confirmResult.isConfirmed) {
-          window.location.href = '/orders'; // Redirect after user confirms
-      } else {
-          // Handle if the user clicks "No"
-          console.log('User chose not to view orders');
-      }
-      } else if (response.status === 501) {
-        // Insufficient wallet balance
-        console.error('Insufficient wallet balance');
-        Swal.fire('Error', 'Insufficient wallet balance.', 'error');
-      } else {
-        // Handle other cases if needed
-        console.error('Failed to place order using wallet');
-        Swal.fire('Error', 'Failed to place order using wallet.', 'error');
       }
     }
+  }
 
   } catch (error) {
     console.error('Error:', error);
@@ -155,38 +136,7 @@ function confirmPlaceOrder() {
     });
     return;
   }
-
-  if (paymentMethod.value === 'cod') {
-    // Display SweetAlert only for "cod" payment method
-    Swal.fire({
-      icon: 'question',
-      title: 'Confirm Order',
-      text: 'Are you sure you want to place this order?',
-      showCancelButton: true,
-      confirmButtonText: 'Yes',
-      cancelButtonText: 'No',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // User clicked "Yes," proceed with order confirmation
-        Swal.fire({
-          icon: 'success',
-          title: 'Order Confirmed!',
-          text: 'Your order has been successfully placed.',
-        }).then(() => {
-          // Redirect to the order details page
-         
-          window.location.href = '/orders';
-        });
-      } else {
-        // User clicked "No" or closed the confirmation prompt
-        Swal.fire({
-          icon: 'info',
-          title: 'Order Not Confirmed',
-          text: 'Your order has not been placed.',
-        });
-      }
-    });
-  } else {
+   else {
     // For non-"cod" payment methods, proceed with the order without displaying SweetAlert
     placeOrder(selectedAddressId.value, paymentMethod.value);
   }
