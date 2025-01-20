@@ -56,7 +56,7 @@ const discountedTotal = totalElement.textContent.replace('₹', ''); // Extract 
         const { order } = await response.json();
         
         const options = {
-          key : "rzp_live_Yns1JlyDs6fTuK",
+          key : "rzp_test_Vz3Fdh1bVQWYj8",
           amount : order.amount,
           currency: order.currency,
           name: '6XO BAGS',

@@ -991,6 +991,10 @@ const placeOrder = async (req, res) => {
 
 const placeOrderRaz = async (req, res) => {
   const { razorpayPaymentId, razorpayOrderId, razorpaySignature,productOrderId  } = req.body;  
+
+  console.log(req.body,'[][][]');
+  
+
   try {
       // Step 1: Verify Razorpay Signature
       if (!verifySignature(razorpayPaymentId, razorpayOrderId, razorpaySignature)) {
