@@ -997,12 +997,22 @@ const placeOrderRaz = async (req, res) => {
         return res.status(400).json({ error: 'Invalid payment signature' });
       }
 
+
+          // Fetch payment details
+    const payment = await razorpay.payments.fetch(razorpayPaymentId);
+    if (payment.status === 'captured') {
+      return res.status(400).json({ error: 'Payment already captured' });
+    }
+
+    // Capture payment
+    await razorpay.payments.capture(razorpayPaymentId,order.grandTotal*100);
+
+
       const order = await Order.findById(productOrderId);
       order.status = 'Ordered';
       order.OrderIsPaid = true;
       await order.save();
     
-    await razorpay.payments.capture(razorpayPaymentId,order.grandTotal*100)
 
     await Cart.findOneAndDelete({user : req.session.user_id})
 
